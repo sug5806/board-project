@@ -17,6 +17,4 @@ public class MainController {
         model.addAttribute("form", PostDTO.builder().build());
         return "/board/form";
     }
-
-
 }
