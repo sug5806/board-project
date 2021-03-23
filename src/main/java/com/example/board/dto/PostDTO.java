@@ -10,4 +10,6 @@ public class PostDTO {
     private String title;
     private String contents;
     private Long viewCount;
+    private Long likeCount;
+    private String creator;
 }
