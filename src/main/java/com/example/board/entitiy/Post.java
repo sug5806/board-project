@@ -23,4 +23,8 @@ public class Post {
 
     @Builder.Default
     private Long viewCount = 0L;
+
+    @Builder.Default
+    private Long likeCount = 0L;
+
 }
