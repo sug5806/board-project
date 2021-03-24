@@ -27,7 +27,7 @@ public class PostService {
         return savePost.getId();
     }
 
-    public List<PostDTO> postList(String type) {
+    public List<PostDTO> allPost(String type) {
         List<Post> list = postRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
 
         Stream<Post> stream = list.stream();

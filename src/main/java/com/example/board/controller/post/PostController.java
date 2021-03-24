@@ -29,7 +29,7 @@ public class PostController {
             value = "type",
             defaultValue = "new") String type) {
 
-        return postService.postList(type);
+        return postService.allPost(type);
 
     }
 }
