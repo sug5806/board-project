@@ -26,6 +26,11 @@
     />
     <title>경제야 놀자</title>
     <style>
+        .l-content {
+            background: #ebeef1;
+            overflow: hidden;
+        }
+
         a {
             color: black;
             text-decoration: none;
@@ -60,8 +65,9 @@
             background-color: #f8f9fa;
         }
 
-        .board-header {
+        .board-header-title {
             font-size: 18px;
+            font-weight: 700;
         }
 
         .board-sub-item {
@@ -80,6 +86,172 @@
             display: inline-block;
             zoom: 1;
             *display: inline;
+        }
+
+        .article-list {
+            background: #f8f9fa;
+            margin-top: 8px;
+            line-height: 18px;
+            font-size: 14px;
+            color: #7b858e;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .15)
+        }
+
+        .article-list + .article-list {
+            margin-top: 0;
+            border-top: 1px solid #ebeef1
+        }
+
+        .article-list--compact .article-list-item, .article-list--fixed .article-list-item {
+            min-height: 40px
+        }
+
+        .article-list--compact .article-list-item__content, .article-list--fixed .article-list-item__content {
+            display: inline-table;
+            width: 100%;
+            table-layout: fixed
+        }
+
+        .article-list--compact .article-list-item__vote, .article-list--fixed .article-list-item__vote {
+            width: 60px;
+            padding-left: 12px;
+            text-align: left
+        }
+
+        .article-list--compact .article-list-item__vote > img, .article-list--fixed .article-list-item__vote > img {
+            margin-right: 4px
+        }
+
+        .article-list--compact .article-list-item__vote > div, .article-list--fixed .article-list-item__vote > div {
+            display: inline
+        }
+
+        .article-list--compact .article-list-item__info, .article-list--fixed .article-list-item__info {
+            display: table-cell
+        }
+
+        .article-list--compact .article-list-item-meta, .article-list--fixed .article-list-item-meta {
+            display: table-cell;
+            width: 212px;
+            table-layout: fixed
+        }
+
+        .article-list--compact .article-list-item-meta__item, .article-list--fixed .article-list-item-meta__item {
+            display: table-cell;
+            padding-left: 0
+        }
+
+        .article-list--compact .article-list-item-meta__item:before, .article-list--fixed .article-list-item-meta__item:before {
+            display: none
+        }
+
+        .article-list--compact .article-list-item-meta__item--date, .article-list--fixed .article-list-item-meta__item--date {
+            width: 80px;
+            padding-right: 8px
+        }
+
+        .article-list--compact .article-list-item-meta__item--author, .article-list--fixed .article-list-item-meta__item--author {
+            width: 100px;
+            padding-right: 24px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100px
+        }
+
+        .article-list-item:hover {
+            background-color: #f8f9fa
+        }
+
+        .article-list-item__vote {
+            width: 72px;
+            vertical-align: middle
+        }
+
+        .article-list-item {
+            position: relative;
+            display: table;
+            table-layout: fixed;
+            width: 100%;
+            min-height: 78px;
+            box-sizing: border-box;
+            border-top: 1px solid #ebeef1;
+            background-color: #fff;
+            padding: 8px 0
+        }
+
+        .article-list--compact .article-list-item, .article-list--fixed .article-list-item {
+            min-height: 40px
+        }
+
+        .article-list--compact .article-list-item__content, .article-list--fixed .article-list-item__content {
+            display: inline-table;
+            width: 100%;
+            table-layout: fixed
+        }
+
+        .article-list--compact .article-list-item__vote, .article-list--fixed .article-list-item__vote {
+            width: 60px;
+            padding-left: 12px;
+            text-align: left
+        }
+
+        .article-list--compact .article-list-item__vote > img, .article-list--fixed .article-list-item__vote > img {
+            margin-right: 4px
+        }
+
+        .article-list--compact .article-list-item__vote > div, .article-list--fixed .article-list-item__vote > div {
+            display: inline
+        }
+
+        .article-list--compact .article-list-item__info, .article-list--fixed .article-list-item__info {
+            display: table-cell
+        }
+
+        .article-list--compact .article-list-item-meta, .article-list--fixed .article-list-item-meta {
+            display: table-cell;
+            width: 212px;
+            table-layout: fixed
+        }
+
+        .article-list--compact .article-list-item-meta__item, .article-list--fixed .article-list-item-meta__item {
+            display: table-cell;
+            padding-left: 0
+        }
+
+        .article-list--compact .article-list-item-meta__item:before, .article-list--fixed .article-list-item-meta__item:before {
+            display: none
+        }
+
+        .article-list--compact .article-list-item-meta__item--date, .article-list--fixed .article-list-item-meta__item--date {
+            width: 80px;
+            padding-right: 8px
+        }
+
+        .article-list--compact .article-list-item-meta__item--author, .article-list--fixed .article-list-item-meta__item--author {
+            width: 100px;
+            padding-right: 24px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100px
+        }
+
+        .article-list--fixed .article-list-item, .article-list--fixed .article-list-item:hover {
+            background: #ecf8ff
+        }
+
+        .article-list--fixed .article-list-item__vote {
+            padding-left: 17px
+        }
+
+        .article-list--fixed .article-list-item__vote > img {
+            display: block
+        }
+
+        .article-list--fixed .article-list-item__title span {
+            color: #1ea1f7;
+            font-weight: 700
         }
     </style>
 </head>
