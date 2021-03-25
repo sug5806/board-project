@@ -2,9 +2,7 @@ package com.example.board.entitiy;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -14,7 +12,7 @@ import javax.persistence.Id;
 public class Post {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String title;
@@ -26,5 +24,8 @@ public class Post {
 
     @Builder.Default
     private Long likeCount = 0L;
+
+    @Enumerated(value = EnumType.STRING)
+    private PostCategory category;
 
 }

@@ -32,25 +32,25 @@
         }
 
         a {
-            color: black;
             text-decoration: none;
+            color: inherit;
         }
 
         a:hover {
-            cursor: pointer;
-            text-decoration: none;
-            color: black;
-        }
-
-        a:link, a:before, a:visited {
-            color: black;
+            /*    cursor: pointer;*/
+            /*    color: inherit;*/
             text-decoration: none;
         }
 
-        a:active {
-            color: #16ae81;
-            text-decoration: none;
-        }
+        /*a:link {*/
+        /*    color: black;*/
+        /*    text-decoration: none;*/
+        /*}*/
+
+        /*a:before{*/
+        /*    color: black;*/
+        /*    text-decoration: none;*/
+        /*}*/
 
         .sidemenu-title {
             color: #7b858e;
@@ -83,6 +83,7 @@
         }
 
         ul > li {
+            list-style: none;
             display: inline-block;
             zoom: 1;
             *display: inline;
@@ -101,12 +102,6 @@
             margin-right: 6px;
             margin-bottom: 6px
         }
-
-        /*.sub-header-search:after {*/
-        /*    content: "";*/
-        /*    display: block;*/
-        /*    clear: both*/
-        /*}*/
 
         .sub-header-search__select {
             float: left;
@@ -149,6 +144,12 @@
             right: 0;
             margin-top: 4px;
             margin-right: 25px;
+        }
+
+        .sidebar-menu__item--active {
+            border-radius: 4px;
+            background: #f8f9fa;
+            color: #16ae81
         }
 
         .article-list {
@@ -316,6 +317,51 @@
             color: #1ea1f7;
             font-weight: 700
         }
+
+        .article-write-buttons {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            z-index: 20000
+        }
+
+        .article-write-buttons {
+            position: static
+        }
+
+        .article-write-buttons:after {
+            content: "";
+            display: block;
+            clear: both
+        }
+
+        .article-write__button--cancel {
+            line-height: 19px;
+            margin-top: 12px;
+            font-size: 16px;
+            color: #7b858e;
+            border-radius: 4px;
+            background-color: #ffffff;
+            border: 1px solid #dddfe4;
+            width: 154px;
+            height: 48px
+        }
+
+        .article-write__button--submit {
+            line-height: 19px;
+            margin-top: 12px;
+            font-size: 16px;
+            color: #ffffff;
+            border-radius: 4px;
+            background-color: #46cfa7;
+            border: 1px solid #dddfe4;
+            width: 154px;
+            height: 48px;
+            position: static;
+            float: right
+        }
+
     </style>
 </head>
 </html>

@@ -18,9 +18,11 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping("/board/post")
-    public String createPostForm(Model model) {
+    public String createPostForm(Model model, @RequestParam(name = "board", defaultValue = "free") String boardType) {
         model.addAttribute("form", PostDTO.builder().build());
-        return "/board/form";
+        model.addAttribute("type", boardType);
+        model.addAttribute("is_write", true);
+        return "main";
     }
 
     @GetMapping("/free")
@@ -28,8 +30,6 @@ public class PostController {
     List<PostDTO> postList(@RequestParam(
             value = "type",
             defaultValue = "new") String type) {
-
         return postService.allPost(type);
-
     }
 }

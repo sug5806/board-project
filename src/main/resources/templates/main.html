@@ -9,7 +9,7 @@
      src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/4349e3ad-b70b-469a-a3b9-3b9c0e52c21e/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210324%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210324T054829Z&X-Amz-Expires=86400&X-Amz-Signature=df8732c3d3ffbbcae3fdeddb72c6f74db29c0601782e4370762f48a0036bd2b2&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22"
      style="position: absolute">
 
-<div class="container" th:object="${post_list}">
+<div class="container">
     <div class="row py-5"></div>
     <div class="row py-5"></div>
     <div class="row py-4"></div>
@@ -18,16 +18,29 @@
         <div class="col-4">
             <div class="container border bg-white">
                 <div class="mt-3 sidemenu-title">정보</div>
-                <a class="row px-3 mx-2 mt-2 mb-3 sidemenu-item">경제 뉴스</a>
+                <a class="row px-3 py-2 mx-2 mt-2 mb-3 sidemenu-item" href="javascript:" id="economy"
+                   onclick="clickBoard(this)">경제 뉴스</a>
                 <hr>
                 <div class="sidemenu-title">커뮤니티</div>
-                <a class="row px-3 mx-2 mt-2 mb-3 sidemenu-item">자유 게시판</a>
-                <a class="row px-3 mx-2 mt-2 mb-3 sidemenu-item">주식 게시판</a>
+                <a class="row px-3 py-2 mx-2 my-1 sidemenu-item" href="javascript:" id="free"
+                   onclick="clickBoard(this)">자유 게시판</a>
+                <a class="row px-3 py-2 mx-2 my-1 sidemenu-item" href="javascript:" id="stock"
+                   onclick="clickBoard(this)">주식 게시판</a>
             </div>
         </div>
 
         <div th:replace="('common/' + ${type}) :: board"></div>
     </div>
 </div>
+
+<script th:inline="javascript">
+    function clickBoard(obj) {
+        document.getElementById("economy").classList.remove("sidebar-menu__item--active")
+        document.getElementById("free").classList.remove("sidebar-menu__item--active")
+        document.getElementById("stock").classList.remove("sidebar-menu__item--active")
+        obj.classList.add("sidebar-menu__item--active");
+        let url = [[${base_url}]]
+    }
+</script>
 </body>
 </html>

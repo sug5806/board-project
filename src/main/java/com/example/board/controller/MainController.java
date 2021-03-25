@@ -21,6 +21,7 @@ public class MainController {
 
         model.addAttribute("type", "free");
         model.addAttribute("post_list", freePostList);
+        model.addAttribute("base_url", "http://localhost:8080");
         return "main";
     }
 }
