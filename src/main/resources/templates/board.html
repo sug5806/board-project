@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/header :: header">
+
+</head>
 <body>
 <div class="col" th:fragment="board">
     <div th:if="${is_write}">

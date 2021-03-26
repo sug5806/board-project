@@ -24,8 +24,13 @@ public class PostController {
     public String createPostForm(Model model, @RequestParam(name = "board", defaultValue = "free") String boardType) {
         model.addAttribute("form", PostDTO.builder().build());
         model.addAttribute("type", boardType);
-        model.addAttribute("is_write", true);
-        return "main";
+        return "post/create";
+    }
+
+    @PostMapping("/post")
+    public String createPost(@Valid PostDTO postDTO) {
+        Post post = postService.createPost(postDTO);
+        return "redirect:/board/" + post.getCategory().toString().toLowerCase();
     }
 
     @GetMapping("/board/{type}")
@@ -38,6 +43,11 @@ public class PostController {
         return "post_list";
     }
 
+    @GetMapping("/board/{id}")
+    public String getPost(@PathVariable(name = "id") Long id, Model model) {
+
+    }
+
 //    @GetMapping("/board/{type}")
 //    public String postList(@PathVariable(name = "type") String boardType, Model model) {
 //        List<PostDTO> postList = postService.allPost(boardType);
@@ -47,11 +57,4 @@ public class PostController {
 //        model.addAttribute("type", boardType);
 //        return "main :: #pList";
 //    }
-
-
-    @PostMapping("/post")
-    public String createPost(@Valid PostDTO postDTO) {
-        Post post = postService.createPost(postDTO);
-        return "redirect:/board/" + post.getCategory().toString().toLowerCase();
-    }
 }

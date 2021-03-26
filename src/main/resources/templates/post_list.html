@@ -1,11 +1,28 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="common/header :: header">
-    <meta charset="UTF-8">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/css/header :: header">
 </head>
-<body class="l-content">
-<div th:replace="common/body_header.html">
 
+<body class="l-content">
+<div th:replace="common/main_header.html"></div>
+<div class="container">
+    <div class="row py-5"></div>
+    <div class="row py-5"></div>
+    <div class="row py-4"></div>
+    <div class="row py-4"></div>
+    <div class="row">
+        <div th:replace="common/sidebar.html :: sidebar">
+
+        </div>
+
+        <div th:replace="common/main_board.html :: board">
+
+        </div>
+
+    </div>
 </div>
+
+<script th:replace="common/javascript/script.html">
+</script>
 </body>
 </html>

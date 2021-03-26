@@ -1,46 +1,40 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <script src="https://cdn.ckeditor.com/4.16.0/standard/ckeditor.js"></script>
-    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
-          integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" rel="stylesheet">
-</head>
 <body>
-<h3>글쓰기</h3>
+<div class="container border bg-white" th:fragment="editor">
+    <div class="col">
+        <h3>글쓰기</h3>
+        <form th:action="@{/post}" th:fragment="create_editor" th:method="post" th:object="${form}">
+            <div class="form-group">
+                <label>
+                    <select class="sub-header-search__select" name="target" th:field="*{category}">
+                        <option value="economy">경제</option>
+                        <option value="free">자유</option>
+                        <option value="stock">주식</option>
+                    </select>
+                </label>
+            </div>
 
-<form th:action="@{/post}" th:method="post" th:object="${form}">
-    <div class="form-group">
-        <label>
-            <select class="sub-header-search__select" name="target" th:field="*{category}">
-                <option value="economy">경제</option>
-                <option value="free">자유</option>
-                <option value="stock">주식</option>
-            </select>
-        </label>
+            <div class="form-group">
+                <label for="title"></label>
+                <input autocomplete="off" class="form-control" id="title" placeholder="제목을 입력하세요" th:field="*{title}"
+                       type="text"/>
+            </div>
+
+            <div class="form-group">
+                <label for="content"></label>
+                <textarea autocomplete="off" class="form-control" id="content" placeholder="Content" rows="4"
+                          th:field="*{contents}" type="text"></textarea>
+            </div>
+
+            <div class="article-write-buttons">
+                <button class="article-write__button--cancel">취소</button>
+
+                <button class="article-write__button--submit" type="submit">작성완료</button>
+            </div>
+
+        </form>
     </div>
-
-    <div class="form-group">
-        <label for="title"></label>
-        <input autocomplete="off" class="form-control" id="title" placeholder="제목을 입력하세요" th:field="*{title}"
-               type="text"/>
-    </div>
-
-    <div class="form-group">
-        <label for="content"></label>
-        <textarea autocomplete="off" class="form-control" id="content" placeholder="Content" rows="4"
-                  th:field="*{contents}" type="text"></textarea>
-    </div>
-
-    <div class="article-write-buttons">
-        <button class="article-write__button--cancel">취소</button>
-
-        <button class="article-write__button--submit" type="submit">작성완료</button>
-    </div>
-</form>
-
-
-<script>
-    CKEDITOR.replace('content');
-</script>
+</div>
 </body>
 </html>
