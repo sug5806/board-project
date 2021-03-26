@@ -9,6 +9,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -41,6 +43,7 @@ public class PostService {
 
         Stream<PostDTO> dtoStream = stream.map(post ->
                 PostDTO.builder()
+                        .id(post.getId())
                         .title(post.getTitle())
                         .contents(post.getContents())
                         .viewCount(post.getViewCount())
@@ -50,6 +53,21 @@ public class PostService {
         );
 
         return dtoStream.collect(Collectors.toList());
+    }
+
+    public PostDTO getPost(Long id) {
+        Optional<Post> optionalPost = postRepository.findById(id);
+
+        Post foundPost = optionalPost.orElseThrow(() -> new NoSuchElementException("not found post"));
+
+        return PostDTO.builder()
+                .id(foundPost.getId())
+                .title(foundPost.getTitle())
+                .contents(foundPost.getContents())
+                .viewCount(foundPost.getViewCount())
+                .likeCount(foundPost.getLikeCount())
+                .category(foundPost.getCategory().toString().toLowerCase())
+                .build();
     }
 
     private PostCategory convertCategory(String category) {

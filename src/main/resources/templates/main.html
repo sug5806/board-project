@@ -4,7 +4,7 @@
 </head>
 
 <body class="l-content">
-<div th:replace="common/main_header.html"></div>
+<div th:replace="common/main_header.html :: main_header"></div>
 <div class="container">
     <div class="row py-5"></div>
     <div class="row py-5"></div>
@@ -21,27 +21,27 @@
     </div>
 </div>
 
-<script th:replace="common/javascript/script.html">
-    function clickBoard(obj) {
-        document.getElementById("economy").classList.remove("sidebar-menu__item--active")
-        document.getElementById("free").classList.remove("sidebar-menu__item--active")
-        document.getElementById("stock").classList.remove("sidebar-menu__item--active")
-        obj.classList.add("sidebar-menu__item--active");
+<!--<script th:replace="common/javascript/script.html">-->
+<!--    function clickBoard(obj) {-->
+<!--        document.getElementById("economy").classList.remove("sidebar-menu__item&#45;&#45;active")-->
+<!--        document.getElementById("free").classList.remove("sidebar-menu__item&#45;&#45;active")-->
+<!--        document.getElementById("stock").classList.remove("sidebar-menu__item&#45;&#45;active")-->
+<!--        obj.classList.add("sidebar-menu__item&#45;&#45;active");-->
 
-        let url = [[${base_url}]]
+<!--        let url = [[${base_url}]]-->
 
-        window.location.href = url + "/board/" + obj.id;
+<!--        window.location.href = url + "/board/" + obj.id;-->
 
-        return false;
+<!--        return false;-->
 
-        // $.ajax({
-        //     url: "/board/" + obj.id,
-        //     type:"GET"
-        // }).done(function (fragment) {
-        //     $("#pList").replaceWith(fragment)
-        // })
-    }
-</script>
+<!--        // $.ajax({-->
+<!--        //     url: "/board/" + obj.id,-->
+<!--        //     type:"GET"-->
+<!--        // }).done(function (fragment) {-->
+<!--        //     $("#pList").replaceWith(fragment)-->
+<!--        // })-->
+<!--    }-->
+<!--</script>-->
 
 </body>
 </html>

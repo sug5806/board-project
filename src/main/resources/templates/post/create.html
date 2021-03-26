@@ -19,36 +19,14 @@
         <div class="col">
             <div class="container border bg-white py-3">
                 <h3>글쓰기</h3>
-                <form th:action="@{/post}" th:fragment="create_editor" th:method="post" th:object="${form}">
-                    <div class="form-group my-0">
-                        <label>
-                            <select class="sub-header-search__select" name="target" th:field="*{category}">
-                                <option value="economy">경제</option>
-                                <option value="free">자유</option>
-                                <option value="stock">주식</option>
-                            </select>
-                        </label>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="title"></label>
-                        <input autocomplete="off" class="form-control" id="title" placeholder="제목을 입력하세요"
-                               th:field="*{title}"
-                               type="text"/>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="content"></label>
-                        <textarea autocomplete="off" class="form-control" id="content" placeholder="Content" rows="4"
-                                  th:field="*{contents}" type="text"></textarea>
-                    </div>
+                <form th:action="@{/post}" th:method="post" th:object="${form}">
+                    <div th:replace="common/editor.html"></div>
 
                     <div class="article-write-buttons">
                         <button class="article-write__button--cancel">취소</button>
 
                         <button class="article-write__button--submit" type="submit">작성완료</button>
                     </div>
-
                 </form>
             </div>
         </div>
@@ -58,19 +36,6 @@
 
 <script>
     CKEDITOR.replace('content');
-
-    function clickBoard(obj) {
-        document.getElementById("economy").classList.remove("sidebar-menu__item--active")
-        document.getElementById("free").classList.remove("sidebar-menu__item--active")
-        document.getElementById("stock").classList.remove("sidebar-menu__item--active")
-        obj.classList.add("sidebar-menu__item--active");
-
-        let url = [[${base_url}]]
-
-        window.location.href = url + "/board/" + obj.id;
-
-        return false;
-    }
 </script>
 
 </body>

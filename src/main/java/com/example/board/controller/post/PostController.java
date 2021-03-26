@@ -40,11 +40,16 @@ public class PostController {
         model.addAttribute("post_list", postList);
         model.addAttribute("base_url", "http://localhost:8080");
         model.addAttribute("type", boardType);
-        return "post_list";
+        return "post/post_list";
     }
 
-    @GetMapping("/board/{id}")
+    @GetMapping("/post/{id}")
     public String getPost(@PathVariable(name = "id") Long id, Model model) {
+        PostDTO post = postService.getPost(id);
+        model.addAttribute("post", post);
+        model.addAttribute("type", post.getCategory().toLowerCase());
+
+        return "post/post";
 
     }
 

@@ -48,7 +48,7 @@
                     <div th:text="${post.getLikeCount()}"></div>
                 </div>
                 <div class="article-list-item__info">
-                    <a href="#">
+                    <a th:href="@{${'/post/' + post.getId()}}">
                         <div class="article-list-item__title" th:text="${post.getTitle()}"></div>
                     </a>
                 </div>
