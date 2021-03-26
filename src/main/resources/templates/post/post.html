@@ -16,7 +16,7 @@
         </div>
 
         <div class="col">
-            <div class="container border bg-white" th:object="${post}">
+            <div class="border bg-white" th:object="${post}">
                 <div class="article-header">
                     <div class="article__title" th:text="${post.getTitle()}">
 
@@ -29,6 +29,38 @@
                             </div>
 
                         </div>
+                        <div class="article-meta-list article-meta-list--right">
+                            <div class="article-meta__item">
+                                <span th:text="${'조회 ' + post.getViewCount()}"></span>
+                            </div>
+                            <div class="article-meta__item">
+                                <!--                                <span th:text="댓글 ${post.getCommentCount()}"></span>-->
+                                <span th:text="${'댓글 ' + post.getViewCount()}"></span>
+                            </div>
+                            <div class="article-meta__item">
+                                <span th:text="${'추천 ' + post.getLikeCount()}"></span>
+                            </div>
+                        </div>
+
+                        <div></div>
+                    </div>
+                    <div class="article-action">
+                        <div class="article-action__item">
+                            <form action="">
+
+                            </form>
+                        </div>
+                        <div class="article-action__item">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="article-content-wrap">
+                    <div class="article-content" th:utext="${post.getContents()}"></div>
+                </div>
+                <div class="article-box">
+                    <div id="postVote">
+                        <div class="article-vote"></div>
                     </div>
                 </div>
             </div>
