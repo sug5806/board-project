@@ -4,6 +4,8 @@ import lombok.*;
 
 import javax.persistence.*;
 
+import static com.example.board.entitiy.PostCategory.*;
+
 @Entity
 @Getter
 @Builder
@@ -27,5 +29,19 @@ public class Post {
 
     @Enumerated(value = EnumType.STRING)
     private PostCategory category;
+
+    public void setCategory(String category) {
+        switch (category) {
+            case "economy":
+                this.category = ECONOMY;
+                break;
+            case "stock":
+                this.category = STOCK;
+                break;
+            default:
+                this.category = FREE;
+                break;
+        }
+    }
 
 }

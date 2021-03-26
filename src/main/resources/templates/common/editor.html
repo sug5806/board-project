@@ -6,7 +6,19 @@
           integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" rel="stylesheet">
 </head>
 <body>
-<form th:action="@{/post(type=${type})}" th:method="post" th:object="${form}">
+<h3>글쓰기</h3>
+
+<form th:action="@{/post}" th:method="post" th:object="${form}">
+    <div class="form-group">
+        <label>
+            <select class="sub-header-search__select" name="target" th:field="*{category}">
+                <option value="economy">경제</option>
+                <option value="free">자유</option>
+                <option value="stock">주식</option>
+            </select>
+        </label>
+    </div>
+
     <div class="form-group">
         <label for="title"></label>
         <input autocomplete="off" class="form-control" id="title" placeholder="제목을 입력하세요" th:field="*{title}"
