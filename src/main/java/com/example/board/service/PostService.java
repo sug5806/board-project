@@ -29,11 +29,7 @@ public class PostService {
                 .category(postDTO.getCategory())
                 .build();
 
-//        post.setCategory(postDTO.getCategory());
-
-        Post savePost = postRepository.save(post);
-
-        return savePost;
+        return postRepository.save(post);
     }
 
     public List<PostDTO> allPost(String category) {
@@ -49,8 +45,9 @@ public class PostService {
                         .title(post.getTitle())
                         .contents(post.getContents())
                         .viewCount(post.getViewCount())
-                        .creator("demo")
                         .likeCount(post.getLikeCount())
+                        .commentCount(post.getCommentCount())
+                        .creator("demo")
                         .build()
         );
 
@@ -68,6 +65,7 @@ public class PostService {
                 .contents(foundPost.getContents())
                 .viewCount(foundPost.getViewCount())
                 .likeCount(foundPost.getLikeCount())
+                .commentCount(foundPost.getCommentCount())
                 .category(foundPost.getCategory())
                 .build();
     }

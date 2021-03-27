@@ -4,8 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 
-import static com.example.board.entity.PostCategory.*;
-
 @Entity
 @Getter
 @Builder
@@ -27,6 +25,9 @@ public class Post {
     @Builder.Default
     private Long likeCount = 0L;
 
+    @Builder.Default
+    private Long commentCount = 0L;
+
     @Enumerated(value = EnumType.STRING)
     private PostCategory category;
 
@@ -37,19 +38,4 @@ public class Post {
     public void changeContents(String contents) {
         this.contents = contents;
     }
-
-    public void setCategory(String category) {
-        switch (category) {
-            case "economy":
-                this.category = ECONOMY;
-                break;
-            case "stock":
-                this.category = STOCK;
-                break;
-            default:
-                this.category = FREE;
-                break;
-        }
-    }
-
 }
