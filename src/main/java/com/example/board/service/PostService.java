@@ -7,6 +7,7 @@ import com.example.board.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.management.OperationsException;
 import java.util.List;
@@ -19,9 +20,11 @@ import static com.example.board.entity.PostCategory.*;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class PostService {
     private final PostRepository postRepository;
 
+    @Transactional
     public Post createPost(PostDTO postDTO) {
         Post post = Post.builder()
                 .title(postDTO.getTitle())
@@ -33,6 +36,7 @@ public class PostService {
     }
 
     public List<PostDTO> allPost(String category) {
+        // TODO: 카테고리 ENUM으로 변경하기
         PostCategory convertCategory = convertCategory(category);
 
         List<Post> list = postRepository.findAllByCategory(convertCategory, Sort.by(Sort.Direction.DESC, "id"));
@@ -54,10 +58,13 @@ public class PostService {
         return dtoStream.collect(Collectors.toList());
     }
 
+    @Transactional
     public PostDTO getPost(Long id) {
         Optional<Post> optionalPost = postRepository.findById(id);
 
         Post foundPost = optionalPost.orElseThrow(() -> new NoSuchElementException("not found post"));
+
+        foundPost.amountViewCount();
 
         return PostDTO.builder()
                 .id(foundPost.getId())
@@ -70,17 +77,8 @@ public class PostService {
                 .build();
     }
 
-    private PostCategory convertCategory(String category) {
-        switch (category) {
-            case "economy":
-                return ECONOMY;
-            case "stock":
-                return STOCK;
-            default:
-                return FREE;
-        }
-    }
 
+    @Transactional
     public Post updatePost(Long id, PostDTO postDTO) {
         Post one = postRepository.getOne(id);
 
@@ -90,6 +88,7 @@ public class PostService {
         return postRepository.save(one);
     }
 
+    @Transactional
     public String deletePost(Long id) throws OperationsException {
         Post post = postRepository.getOne(id);
         postRepository.delete(post);
@@ -101,5 +100,16 @@ public class PostService {
         }
 
         return post.getCategory().toString().toLowerCase();
+    }
+
+    private PostCategory convertCategory(String category) {
+        switch (category) {
+            case "economy":
+                return ECONOMY;
+            case "stock":
+                return STOCK;
+            default:
+                return FREE;
+        }
     }
 }

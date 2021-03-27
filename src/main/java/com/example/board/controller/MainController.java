@@ -17,6 +17,7 @@ public class MainController {
 
     @GetMapping("/")
     public String Main(Model model) {
+        // TODO: 카테고리 ENUM으로 변경하기
         List<PostDTO> freePostList = postService.allPost("free");
 
         model.addAttribute("type", "free");

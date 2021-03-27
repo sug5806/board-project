@@ -38,4 +38,8 @@ public class Post {
     public void changeContents(String contents) {
         this.contents = contents;
     }
+
+    public void amountViewCount() {
+        this.viewCount = this.getViewCount() + 1;
+    }
 }
