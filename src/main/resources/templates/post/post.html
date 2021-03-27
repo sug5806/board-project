@@ -25,7 +25,7 @@
                         <div class="article-meta-list">
                             <div class="article-list-item-meta__item">
                                 <a th:href="@{/board/{type}(type=${post.getCategory()})}"
-                                   th:text="${post.getCategory()}"></a>
+                                   th:text="${post.getCategory().getTitle()}"></a>
                             </div>
 
                         </div>
@@ -44,14 +44,18 @@
 
                         <div></div>
                     </div>
+
                     <div class="article-action">
                         <div class="article-action__item">
-                            <form action="">
-
+                            <form th:action="@{${'/post/'+post.getId()+'/delete'}}"
+                                  th:method="post">
+                                <button class="btn btn-danger">
+                                    삭제
+                                </button>
                             </form>
                         </div>
                         <div class="article-action__item">
-
+                            <a class="btn btn-light" th:href="@{${'/post/'+post.getId()+'/edit'}}">수정</a>
                         </div>
                     </div>
                 </div>
@@ -68,6 +72,10 @@
 
     </div>
 </div>
+
+<script>
+
+</script>
 
 </body>
 </html>

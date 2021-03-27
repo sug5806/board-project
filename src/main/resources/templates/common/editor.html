@@ -3,10 +3,25 @@
 <body>
 <div class="form-group my-0" th:fragment="editor">
     <label>
-        <select class="sub-header-search__select" name="target" th:field="*{category}">
-            <option value="economy">경제</option>
-            <option value="free">자유</option>
-            <option value="stock">주식</option>
+        <select class="sub-header-search__select" name="target" th:field="*{category}"
+                th:if="${is_create == true}">
+            <option
+                    th:each="value : ${T(com.example.board.entity.PostCategory).values()}"
+                    th:text="${value.getTitle()}"
+                    th:value="${value.name()}"
+            >
+
+            </option>
+        </select>
+
+        <select class="sub-header-search__select" name="target" th:field="*{category}"
+                th:unless="${is_create == true}">
+            <option
+                    th:text="${form.getCategory().getTitle()}"
+                    th:value="${form.getCategory().name()}"
+            >
+
+            </option>
         </select>
     </label>
 

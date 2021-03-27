@@ -20,7 +20,7 @@
             <div class="container border bg-white py-3">
                 <h3>글쓰기</h3>
                 <form th:action="@{/post}" th:method="post" th:object="${form}">
-                    <div th:replace="common/editor.html"></div>
+                    <div th:replace="common/editor.html :: editor"></div>
 
                     <div class="article-write-buttons">
                         <button class="article-write__button--cancel">취소</button>

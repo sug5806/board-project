@@ -1,7 +1,7 @@
 package com.example.board.repository;
 
-import com.example.board.entitiy.Post;
-import com.example.board.entitiy.PostCategory;
+import com.example.board.entity.Post;
+import com.example.board.entity.PostCategory;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

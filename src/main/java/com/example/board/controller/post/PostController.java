@@ -1,7 +1,7 @@
 package com.example.board.controller.post;
 
 import com.example.board.dto.PostDTO;
-import com.example.board.entitiy.Post;
+import com.example.board.entity.Post;
 import com.example.board.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.management.OperationsException;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -24,6 +25,7 @@ public class PostController {
     public String createPostForm(Model model, @RequestParam(name = "board", defaultValue = "free") String boardType) {
         model.addAttribute("form", PostDTO.builder().build());
         model.addAttribute("type", boardType);
+        model.addAttribute("is_create", true);
         return "post/create";
     }
 
@@ -45,12 +47,39 @@ public class PostController {
 
     @GetMapping("/post/{id}")
     public String getPost(@PathVariable(name = "id") Long id, Model model) {
-        PostDTO post = postService.getPost(id);
-        model.addAttribute("post", post);
-        model.addAttribute("type", post.getCategory().toLowerCase());
+        PostDTO postDTO = postService.getPost(id);
+        model.addAttribute("post", postDTO);
+        model.addAttribute("type", postDTO.getCategory());
 
         return "post/post";
 
+    }
+
+    @GetMapping("/post/{id}/edit")
+    public String editPost(@PathVariable(name = "id") Long id, Model model) {
+        PostDTO postDTO = postService.getPost(id);
+        model.addAttribute("form", postDTO);
+
+        return "post/edit";
+    }
+
+    @PostMapping("/post/{id}")
+    public String updatePost(@PathVariable(name = "id") Long id, @Valid PostDTO postDTO) {
+        Post post = postService.updatePost(id, postDTO);
+
+        return "redirect:/post/" + post.getId();
+    }
+
+    @PostMapping("/post/{id}/delete")
+    public String deletePost(@PathVariable(name = "id") Long id) {
+        String postCategory = "";
+        try {
+            postCategory = postService.deletePost(id);
+        } catch (OperationsException e) {
+            return "main";
+        }
+
+        return "redirect:/board/" + postCategory;
     }
 
 //    @GetMapping("/board/{type}")

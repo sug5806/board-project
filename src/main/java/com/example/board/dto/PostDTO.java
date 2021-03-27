@@ -1,5 +1,6 @@
 package com.example.board.dto;
 
+import com.example.board.entity.PostCategory;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -17,8 +18,7 @@ public class PostDTO {
     @NotBlank
     private String contents;
 
-    @NotBlank
-    private String category;
+    private PostCategory category;
 
     private Long viewCount;
     private Long likeCount;

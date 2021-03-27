@@ -1,10 +1,10 @@
-package com.example.board.entitiy;
+package com.example.board.entity;
 
 import lombok.*;
 
 import javax.persistence.*;
 
-import static com.example.board.entitiy.PostCategory.*;
+import static com.example.board.entity.PostCategory.*;
 
 @Entity
 @Getter
@@ -29,6 +29,14 @@ public class Post {
 
     @Enumerated(value = EnumType.STRING)
     private PostCategory category;
+
+    public void changeTitle(String title) {
+        this.title = title;
+    }
+
+    public void changeContents(String contents) {
+        this.contents = contents;
+    }
 
     public void setCategory(String category) {
         switch (category) {

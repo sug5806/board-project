@@ -1,20 +1,21 @@
 package com.example.board.service;
 
 import com.example.board.dto.PostDTO;
-import com.example.board.entitiy.Post;
-import com.example.board.entitiy.PostCategory;
+import com.example.board.entity.Post;
+import com.example.board.entity.PostCategory;
 import com.example.board.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.management.OperationsException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.example.board.entitiy.PostCategory.*;
+import static com.example.board.entity.PostCategory.*;
 
 @Service
 @RequiredArgsConstructor
@@ -25,9 +26,10 @@ public class PostService {
         Post post = Post.builder()
                 .title(postDTO.getTitle())
                 .contents(postDTO.getContents())
+                .category(postDTO.getCategory())
                 .build();
 
-        post.setCategory(postDTO.getCategory());
+//        post.setCategory(postDTO.getCategory());
 
         Post savePost = postRepository.save(post);
 
@@ -66,7 +68,7 @@ public class PostService {
                 .contents(foundPost.getContents())
                 .viewCount(foundPost.getViewCount())
                 .likeCount(foundPost.getLikeCount())
-                .category(foundPost.getCategory().toString().toLowerCase())
+                .category(foundPost.getCategory())
                 .build();
     }
 
@@ -79,5 +81,27 @@ public class PostService {
             default:
                 return FREE;
         }
+    }
+
+    public Post updatePost(Long id, PostDTO postDTO) {
+        Post one = postRepository.getOne(id);
+
+        one.changeTitle(postDTO.getTitle());
+        one.changeContents(postDTO.getContents());
+
+        return postRepository.save(one);
+    }
+
+    public String deletePost(Long id) throws OperationsException {
+        Post post = postRepository.getOne(id);
+        postRepository.delete(post);
+
+        boolean isExist = postRepository.existsById(id);
+
+        if (isExist) {
+            throw new OperationsException("게시글 삭제에 실패하였습니다.");
+        }
+
+        return post.getCategory().toString().toLowerCase();
     }
 }
