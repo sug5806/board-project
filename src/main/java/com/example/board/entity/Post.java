@@ -32,6 +32,10 @@ public class Post extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private PostCategory category;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public void changeTitle(String title) {
         this.title = title;
     }
@@ -42,5 +46,9 @@ public class Post extends BaseEntity {
 
     public void amountViewCount() {
         this.viewCount = this.getViewCount() + 1;
+    }
+
+    public void mappingUser(User user) {
+        this.user = user;
     }
 }
