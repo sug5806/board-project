@@ -49,7 +49,9 @@
                 </div>
                 <div class="article-list-item__info">
                     <a th:href="@{${'/post/' + post.getId()}}">
-                        <div class="article-list-item__title" th:text="${post.getTitle()}"></div>
+                        <div class="article-list-item__title">
+                            <span class="post-title" th:text="${post.getTitle()}"></span>
+                        </div>
                     </a>
                 </div>
                 <div class="article-list-item-meta">
