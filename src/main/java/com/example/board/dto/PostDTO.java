@@ -24,4 +24,6 @@ public class PostDTO {
     private Long likeCount;
     private Long commentCount;
     private String creator;
+
+    private UserDTO userDTO;
 }

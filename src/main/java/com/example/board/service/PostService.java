@@ -1,15 +1,20 @@
 package com.example.board.service;
 
 import com.example.board.dto.PostDTO;
+import com.example.board.dto.UserDTO;
 import com.example.board.entity.Post;
 import com.example.board.entity.PostCategory;
+import com.example.board.entity.User;
 import com.example.board.repository.PostRepository;
+import com.example.board.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.management.OperationsException;
+import java.security.Principal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -23,14 +28,22 @@ import static com.example.board.entity.PostCategory.*;
 @Transactional
 public class PostService {
     private final PostRepository postRepository;
+    private final UserRepository userRepository;
 
     @Transactional
-    public Post createPost(PostDTO postDTO) {
+    public Post createPost(PostDTO postDTO, Principal principal) {
+
+        Optional<User> byEmail = userRepository.findByEmail(principal.getName());
+
+        User user = byEmail.orElseThrow(() -> new UsernameNotFoundException("아이디나 비밀번호가 틀립니다."));
+
         Post post = Post.builder()
                 .title(postDTO.getTitle())
                 .contents(postDTO.getContents())
                 .category(postDTO.getCategory())
                 .build();
+
+        user.mappingPost(post);
 
         return postRepository.save(post);
     }
@@ -52,6 +65,9 @@ public class PostService {
                         .likeCount(post.getLikeCount())
                         .commentCount(post.getCommentCount())
                         .creator("demo")
+                        .userDTO(UserDTO.builder()
+                                .nickname(post.getUser().getName())
+                                .build())
                         .build()
         );
 

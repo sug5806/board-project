@@ -4,6 +4,7 @@ import com.example.board.dto.PostDTO;
 import com.example.board.entity.Post;
 import com.example.board.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.management.OperationsException;
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -21,6 +23,7 @@ public class PostController {
 
     private final PostService postService;
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/board/post")
     public String createPostForm(Model model, @RequestParam(name = "board", defaultValue = "free") String boardType) {
         model.addAttribute("form", PostDTO.builder().build());
@@ -30,8 +33,9 @@ public class PostController {
     }
 
     @PostMapping("/post")
-    public String createPost(@Valid PostDTO postDTO) {
-        Post post = postService.createPost(postDTO);
+    @PreAuthorize("isAuthenticated()")
+    public String createPost(@Valid PostDTO postDTO, Principal principal) {
+        Post post = postService.createPost(postDTO, principal);
         return "redirect:/board/" + post.getCategory().toString().toLowerCase();
     }
 
@@ -64,6 +68,7 @@ public class PostController {
     }
 
     @PostMapping("/post/{id}")
+    @PreAuthorize("isAuthenticated()")
     public String updatePost(@PathVariable(name = "id") Long id, @Valid PostDTO postDTO) {
         Post post = postService.updatePost(id, postDTO);
 
@@ -71,6 +76,7 @@ public class PostController {
     }
 
     @PostMapping("/post/{id}/delete")
+    @PreAuthorize("isAuthenticated()")
     public String deletePost(@PathVariable(name = "id") Long id) {
         String postCategory = "";
         try {

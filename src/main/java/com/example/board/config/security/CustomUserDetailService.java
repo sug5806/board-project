@@ -8,6 +8,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailService implements UserDetailsService {
@@ -15,11 +17,13 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User findUser = userRepository.findByEmail(email);
+        Optional<User> byEmail = userRepository.findByEmail(email);
+
+        User user = byEmail.orElseThrow(() -> new UsernameNotFoundException("아이디나 비밀번호가 틀립니다."));
 
         return CustomUserDetails.builder()
-                .email(findUser.getEmail())
-                .password(findUser.getPassword())
+                .email(user.getEmail())
+                .password(user.getPassword())
                 .authority("ROLE_USER")
                 .enabled(true)
                 .build();

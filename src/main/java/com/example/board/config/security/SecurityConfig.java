@@ -12,7 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true)
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -31,9 +31,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/common/css/**").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/signup").permitAll()
-//                .antMatchers("/").permitAll()
                 .antMatchers("/board/**").permitAll()
                 .antMatchers("/post/**").permitAll()
+                .antMatchers("/board/post").authenticated()
+//                .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .loginProcessingUrl("/authenticate")
