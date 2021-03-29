@@ -17,65 +17,130 @@
 
         <div class="col">
             <div class="border bg-white" th:object="${post}">
-                <div class="article-header">
-                    <div class="article__title" th:text="${post.getTitle()}">
+                <div class="article">
+                    <div class="article-header">
+                        <div class="article__title" th:text="${post.getTitle()}">
 
+                        </div>
+                        <div class="article-meta">
+                            <div class="article-meta-list">
+                                <div class="article-list-item-meta__item">
+                                    <a th:href="@{/board/{type}(type=${post.getCategory()})}"
+                                       th:text="${post.getCategory().getTitle()}"></a>
+                                </div>
+                                <div class="article-list-item-meta__item">
+                                    <a href="#"
+                                       th:text="${post.getUserDTO().getNickname()}"></a>
+                                </div>
+
+                            </div>
+                            <div class="article-meta-list article-meta-list--right">
+                                <div class="article-meta__item">
+                                    <span th:text="${'조회 ' + post.getViewCount()}"></span>
+                                </div>
+                                <div class="article-meta__item">
+                                    <!--                                <span th:text="댓글 ${post.getCommentCount()}"></span>-->
+                                    <span th:text="${'댓글 ' + post.getCommentCount()}"></span>
+                                </div>
+                                <div class="article-meta__item">
+                                    <span th:text="${'추천 ' + post.getLikeCount()}"></span>
+                                </div>
+                            </div>
+
+                            <div></div>
+                        </div>
+
+                        <div class="article-action">
+                            <div class="article-action__item">
+                                <form th:action="@{${'/post/'+post.getId()+'/delete'}}"
+                                      th:method="post">
+                                    <button class="btn btn-danger">
+                                        삭제
+                                    </button>
+                                </form>
+                            </div>
+                            <div class="article-action__item">
+                                <a class="btn btn-light" th:href="@{${'/post/'+post.getId()+'/edit'}}">수정</a>
+                            </div>
+                        </div>
                     </div>
-                    <div class="article-meta">
-                        <div class="article-meta-list">
-                            <div class="article-list-item-meta__item">
-                                <a th:href="@{/board/{type}(type=${post.getCategory()})}"
-                                   th:text="${post.getCategory().getTitle()}"></a>
-                            </div>
-
-                        </div>
-                        <div class="article-meta-list article-meta-list--right">
-                            <div class="article-meta__item">
-                                <span th:text="${'조회 ' + post.getViewCount()}"></span>
-                            </div>
-                            <div class="article-meta__item">
-                                <!--                                <span th:text="댓글 ${post.getCommentCount()}"></span>-->
-                                <span th:text="${'댓글 ' + post.getViewCount()}"></span>
-                            </div>
-                            <div class="article-meta__item">
-                                <span th:text="${'추천 ' + post.getLikeCount()}"></span>
-                            </div>
-                        </div>
-
-                        <div></div>
+                    <div class="article-content-wrap">
+                        <div class="article-content" th:utext="${post.getContents()}"></div>
                     </div>
-
-                    <div class="article-action">
-                        <div class="article-action__item">
-                            <form th:action="@{${'/post/'+post.getId()+'/delete'}}"
-                                  th:method="post">
-                                <button class="btn btn-danger">
-                                    삭제
-                                </button>
-                            </form>
-                        </div>
-                        <div class="article-action__item">
-                            <a class="btn btn-light" th:href="@{${'/post/'+post.getId()+'/edit'}}">수정</a>
+                    <div class="article-box">
+                        <div id="postVote">
+                            <div class="article-vote"></div>
                         </div>
                     </div>
                 </div>
-                <div class="article-content-wrap">
-                    <div class="article-content" th:utext="${post.getContents()}"></div>
-                </div>
-                <div class="article-box">
-                    <div id="postVote">
-                        <div class="article-vote"></div>
+                <div class="comment-wrap">
+                    <div class="comment-header">
+                        <h2 class="comment__title">댓글</h2>
+                        <span class="comment__count">
+                            총
+                            <em th:text="${post.getCommentCount()}"></em>
+                            개
+                        </span>
+                    </div>
+                    <div class="comment-write">
+                        <form method="post" th:action="@{${'~/post/'+post.getId()+'/comment'}}">
+                            <div class="comment-write-inner">
+                                <div class="comment-write__name"></div>
+                                <div class="comment-write__content">
+                                    <textarea maxlength="1000" name="contents"
+                                              placeholder="댓글을 작성해 주세요. 작성자에게 큰 힘이 됩니다."
+                                              style="overflow: hidden; overflow-wrap: break-word; height: 44px;"></textarea>
+                                </div>
+                                <div class="comment-write-footer">
+                                    <div class="comment-write-length"></div>
+                                    <div class="comment-write-submit">
+                                        <button class="button button--green" type="submit">작성</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!--                        <li class="comment-l" ">-->
+                    <div class="comment" th:each="comment : ${post.getComments()}">
+                        <div class="comment-meta">
+                                   <span class="comment__name comment__name--writer">
+                                       <a
+                                               th:href="@{~+'/board/'+${post.getCategory().name()}(q=${post.getUserDTO().getId()},target='user_id')}"
+                                               th:text="${comment.getUser().getNickname()}"
+                                       >
+
+                                       </a>
+                                   </span>
+                        </div>
+                        <div class="comment-content">
+                            <p th:text="${comment.getContents()}"></p>
+                        </div>
+                        <div class="comment-button">
+                            <ul>
+                                <li>
+                                    <button class="comment__button comment__button--red" type="button">
+                                        삭제
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="comment__button" type="button">
+                                        <img alt
+                                             src="https://economy-bucket.s3.ap-northeast-2.amazonaws.com/reply.png"
+                                             width="16">
+                                        답글 쓰기
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
+
             </div>
         </div>
 
     </div>
 </div>
-
-<script>
-
-</script>
 
 </body>
 </html>

@@ -4,6 +4,7 @@ import com.example.board.entity.PostCategory;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 @Data
 @Builder
@@ -22,8 +23,10 @@ public class PostDTO {
 
     private Long viewCount;
     private Long likeCount;
-    private Long commentCount;
+    private int commentCount;
     private String creator;
 
     private UserDTO userDTO;
+
+    private List<CommentDTO> comments;
 }

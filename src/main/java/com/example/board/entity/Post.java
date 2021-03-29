@@ -4,6 +4,10 @@ import com.example.board.entity.common.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
@@ -27,14 +31,17 @@ public class Post extends BaseEntity {
     private Long likeCount = 0L;
 
     @Builder.Default
-    private Long commentCount = 0L;
+    private int commentCount = 0;
 
     @Enumerated(value = EnumType.STRING)
     private PostCategory category;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(fetch = LAZY, mappedBy = "post")
+    private List<Comment> comments = new ArrayList<>();
 
     public void changeTitle(String title) {
         this.title = title;
@@ -50,5 +57,10 @@ public class Post extends BaseEntity {
 
     public void mappingUser(User user) {
         this.user = user;
+        user.mappingPost(this);
+    }
+
+    public void mappingComment(Comment comment) {
+        this.comments.add(comment);
     }
 }

@@ -1,7 +1,9 @@
 package com.example.board.service;
 
+import com.example.board.dto.CommentDTO;
 import com.example.board.dto.PostDTO;
 import com.example.board.dto.UserDTO;
+import com.example.board.entity.Comment;
 import com.example.board.entity.Post;
 import com.example.board.entity.PostCategory;
 import com.example.board.entity.User;
@@ -43,7 +45,7 @@ public class PostService {
                 .category(postDTO.getCategory())
                 .build();
 
-        user.mappingPost(post);
+        post.mappingUser(user);
 
         return postRepository.save(post);
     }
@@ -66,6 +68,7 @@ public class PostService {
                         .commentCount(post.getCommentCount())
                         .creator("demo")
                         .userDTO(UserDTO.builder()
+                                .id(post.getUser().getId())
                                 .nickname(post.getUser().getName())
                                 .build())
                         .build()
@@ -82,14 +85,32 @@ public class PostService {
 
         foundPost.amountViewCount();
 
+        Stream<Comment> stream = foundPost.getComments().stream();
+
+        Stream<CommentDTO> commentDTOStream = stream.map(comment ->
+                CommentDTO.builder()
+                        .contents(comment.getContents())
+                        .user(UserDTO.builder()
+                                .id(comment.getUser().getId())
+                                .nickname(comment.getUser().getName())
+                                .build())
+                        .build()
+        );
+
+        List<CommentDTO> collect = commentDTOStream.collect(Collectors.toList());
+
         return PostDTO.builder()
                 .id(foundPost.getId())
                 .title(foundPost.getTitle())
                 .contents(foundPost.getContents())
                 .viewCount(foundPost.getViewCount())
                 .likeCount(foundPost.getLikeCount())
-                .commentCount(foundPost.getCommentCount())
                 .category(foundPost.getCategory())
+                .userDTO(UserDTO.builder()
+                        .nickname(foundPost.getUser().getName())
+                        .build())
+                .comments(collect)
+                .commentCount(collect.size())
                 .build();
     }
 
