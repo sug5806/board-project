@@ -19,6 +19,7 @@ public class CustomUserDetails implements UserDetails {
     private String email;
     private String password;
     private String authority;
+    private String nickname;
     private boolean enabled;
 
     @Override
@@ -27,6 +28,10 @@ public class CustomUserDetails implements UserDetails {
         auth.add(new SimpleGrantedAuthority(authority));
 
         return auth;
+    }
+
+    public String getNickname() {
+        return this.nickname;
     }
 
     @Override
