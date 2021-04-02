@@ -1,5 +1,6 @@
 package com.example.board.service;
 
+import com.example.board.config.custom_exception.PostNotFoundException;
 import com.example.board.dto.CommentDTO;
 import com.example.board.dto.PostDTO;
 import com.example.board.dto.UserDTO;
@@ -10,6 +11,7 @@ import com.example.board.entity.User;
 import com.example.board.repository.PostRepository;
 import com.example.board.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -18,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.management.OperationsException;
 import java.security.Principal;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -28,6 +29,7 @@ import static com.example.board.entity.PostCategory.*;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
@@ -81,7 +83,7 @@ public class PostService {
     public PostDTO getPost(Long id) {
         Optional<Post> optionalPost = postRepository.findById(id);
 
-        Post foundPost = optionalPost.orElseThrow(() -> new NoSuchElementException("not found post"));
+        Post foundPost = optionalPost.orElseThrow(() -> new PostNotFoundException(id));
 
         foundPost.amountViewCount();
 
