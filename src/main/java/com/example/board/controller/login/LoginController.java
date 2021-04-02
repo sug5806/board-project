@@ -6,8 +6,9 @@ import com.example.board.dto.UserDTO;
 import com.example.board.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
@@ -19,23 +20,27 @@ public class LoginController {
     private final UserService userService;
 
     @GetMapping("/login")
-    public String loginForm(Model model) {
-        model.addAttribute("form", LoginDTO.builder().build());
+    public String loginForm(@ModelAttribute("form") LoginDTO loginDTO) {
+        return "/login";
+    }
 
+    @PostMapping("/login")
+    public String loginFail(@ModelAttribute("form") LoginDTO loginDTO) {
         return "/login";
     }
 
     @GetMapping("/signup")
-    public String singupForm(Model model) {
-        model.addAttribute("form", SignupDTO.builder().build());
-
+    public String singupForm(@ModelAttribute("form") SignupDTO signupDTO) {
         return "/signup";
     }
 
     @PostMapping("/signup")
-    public String singup(@Valid SignupDTO signupDTO) {
-        UserDTO signup = userService.signup(signupDTO);
+    public String singup(@Valid @ModelAttribute("form") SignupDTO signupDTO, BindingResult result) {
+        if (result.hasErrors()) {
+            return "/signup";
+        }
 
+        UserDTO signup = userService.signup(signupDTO);
 
         return "redirect:/";
     }

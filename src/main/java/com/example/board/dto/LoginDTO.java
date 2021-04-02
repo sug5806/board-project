@@ -12,9 +12,9 @@ import javax.validation.constraints.NotBlank;
 public class LoginDTO {
 
     @Email
-    @NotBlank
+    @NotBlank(message = "이메일을 입력해주세요")
     private String email;
 
-    @NotBlank
+    @NotBlank(message = "비밀번호를 입력해주세요")
     private String password;
 }

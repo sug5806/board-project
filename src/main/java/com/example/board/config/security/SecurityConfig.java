@@ -1,5 +1,6 @@
 package com.example.board.config.security;
 
+import com.example.board.config.security.login.AuthFailureHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +18,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserAuthenticationProvider userAuthenticationProvider;
+    private final AuthFailureHandler authFailureHandler;
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -37,10 +39,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .loginProcessingUrl("/authenticate")
                 .loginPage("/login")
-//                .failureUrl("login?error")
                 .defaultSuccessUrl("/", false)
+//                .failureUrl("/login?error=true")
+                .failureHandler(authFailureHandler)
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .permitAll()
