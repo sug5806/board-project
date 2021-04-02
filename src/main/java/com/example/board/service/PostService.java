@@ -89,6 +89,7 @@ public class PostService {
 
         Stream<CommentDTO> commentDTOStream = stream.map(comment ->
                 CommentDTO.builder()
+                        .id(comment.getId())
                         .contents(comment.getContents())
                         .user(UserDTO.builder()
                                 .id(comment.getUser().getId())

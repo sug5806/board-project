@@ -60,6 +60,7 @@ public class PostController {
     }
 
     @GetMapping("/post/{id}/edit")
+    @PreAuthorize("isAuthenticated()")
     public String editPost(@PathVariable(name = "id") Long id, Model model) {
         PostDTO postDTO = postService.getPost(id);
         model.addAttribute("form", postDTO);

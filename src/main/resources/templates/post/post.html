@@ -119,18 +119,25 @@
                         <div class="comment-button">
                             <ul>
                                 <li>
-                                    <button class="comment__button comment__button--red" type="button">
+                                    <button class="comment__button comment__button--red"
+                                            th:onclick="deleteComment([[${post.getId()}]],[[${comment.getId()}]])"
+
+                                            type="button"
+                                    >
                                         삭제
                                     </button>
                                 </li>
-                                <li>
-                                    <button class="comment__button" type="button">
-                                        <img alt
-                                             src="https://economy-bucket.s3.ap-northeast-2.amazonaws.com/reply.png"
-                                             width="16">
-                                        답글 쓰기
-                                    </button>
-                                </li>
+
+                                <!--                                            th:attr="onclick=|deleteComment('${comment.getId()}')|"-->
+                                <!--                                <li>-->
+                                <!--                                    <button class="comment__button" type="button"-->
+                                <!--                                            th:attr="onclick=|deleteComment('${comment.getId()}')|">-->
+                                <!--                                        <img alt-->
+                                <!--                                             src="https://economy-bucket.s3.ap-northeast-2.amazonaws.com/reply.png"-->
+                                <!--                                             width="16">-->
+                                <!--                                        답글 쓰기-->
+                                <!--                                    </button>-->
+                                <!--                                </li>-->
                             </ul>
                         </div>
                     </div>
@@ -141,6 +148,23 @@
 
     </div>
 </div>
+
+<script th:inline="javascript">
+
+    function deleteComment(postId, commentId) {
+        if (confirm("댓글을 삭제할까요?")) {
+            var uri = "/post/" + postId + "/comment/" + commentId + "/delete";
+            var html = "";
+
+            html += '<form name="deleteForm" action="' + uri + '" method="post"></form>';
+
+            $("body").append(html);
+            document.deleteForm.submit();
+        } else {
+            alert("노우");
+        }
+    }
+</script>
 
 </body>
 </html>

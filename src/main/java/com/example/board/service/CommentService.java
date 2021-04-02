@@ -8,11 +8,13 @@ import com.example.board.repository.CommentRepository;
 import com.example.board.repository.PostRepository;
 import com.example.board.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -43,5 +45,17 @@ public class CommentService {
         return CommentDTO.builder()
                 .contents(createdComment.getContents())
                 .build();
+    }
+
+    public void deleteComment(Long commentId, Principal principal) {
+        Optional<Comment> optionalComment = commentRepository.findById(commentId);
+
+        Comment findComment = optionalComment.orElseThrow(() -> new NoSuchElementException("댓글을 찾을 수 없습니다."));
+
+        if (!findComment.getUser().getEmail().equals(principal.getName())) {
+            throw new AuthorizationServiceException("삭제 권한이 없습니다.");
+        }
+
+        commentRepository.delete(findComment);
     }
 }

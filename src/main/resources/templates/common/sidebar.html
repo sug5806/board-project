@@ -6,7 +6,13 @@
     <div class="container border bg-white">
 
         <div class="sidebar-content-header" th:if="${#authorization.expr('isAuthenticated()')}">
-            <div class="sidebar-button" th:text="${'안녕하세요 '+#authentication.getName()+'님'}">
+            <div class="sidebar-button">
+                <div class="sidebar-button__item">
+                    <span th:text="${'안녕하세요 '+#authentication.getName()+'님'}"></span>
+                </div>
+                <div class="sidebar-button__item">
+                    <a class="button button--green" th:href="@{~/logout}">로그아웃</a>
+                </div>
             </div>
         </div>
 
