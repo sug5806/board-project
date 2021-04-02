@@ -50,7 +50,8 @@
                             <div></div>
                         </div>
 
-                        <div class="article-action">
+                        <div class="article-action"
+                             th:if="${post.getUserDTO().getEmail() == #authentication.getName()}">
                             <div class="article-action__item">
                                 <form th:action="@{${'/post/'+post.getId()+'/delete'}}"
                                       th:method="post">
@@ -116,7 +117,8 @@
                         <div class="comment-content">
                             <p th:text="${comment.getContents()}"></p>
                         </div>
-                        <div class="comment-button">
+                        <div class="comment-button"
+                             th:if="${comment.getUser().getEmail() == #authentication.getName()}">
                             <ul>
                                 <li>
                                     <button class="comment__button comment__button--red"

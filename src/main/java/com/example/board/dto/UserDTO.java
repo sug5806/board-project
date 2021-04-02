@@ -8,5 +8,6 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserDTO {
     private Long id;
+    private String email;
     private String nickname;
 }
