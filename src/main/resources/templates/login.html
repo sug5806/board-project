@@ -32,11 +32,15 @@
                         <p class="error_message" th:text="${errorMessage}"></p>
                     </div>
 
-                    <button class="member-button login__btn" type="submit">로그인</button>
+                    <button class="btn btn-info btn-lg btn-block mt-5" type="submit">로그인</button>
                 </form>
 
-                <div>
-                    <a th:href="@{~/signup}">회원가입</a>
+                <div class="login__l-sign-up">
+                    경제야놀자가 처음이세요?
+                    <span>
+                        <a th:href="@{~/signup}">회원가입</a>
+                    </span>
+
                 </div>
             </div>
         </div>
