@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+}<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 <div class="col" th:fragment="board">
@@ -11,17 +11,11 @@
             <a class="btn btn-info" th:href="@{/board/post}">글쓰기</a>
         </div>
         <div class="row">
-            <div class="board-sub-item">
-                인기
-            </div>
-            <div class="board-sub-item">
-                최신
-            </div>
-            <div class="board-sub-item">
-                TOP
-            </div>
-            <div class="sub-header-search">
-                <form>
+            <span class="sub-link__item my-auto">최신</span>
+            <span class="sub-link__item my-auto">인기</span>
+
+            <div class="sub-header-search my-auto">
+                <form th:action="@{${'/board/'+type+'/search'}}" th:method="get">
                     <label>
                         <select class="sub-header-search__select" name="target">
                             <option value="title">제목</option>

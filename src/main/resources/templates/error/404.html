@@ -16,6 +16,38 @@
         </div>
 
         <div class="col" th:fragment="board">
+            <div class="container border bg-white">
+                <div class="row px-3 py-4 d-flex justify-content-between align-middle">
+                    <h2 class="board-header-title">게시판</h2>
+                    <!--            <a th:href="@{{base_url}/{type}/write(base_url=${base_url}, type=${type})}">-->
+                    <!--            <a th:href="@{${base_url + '/' + type + '/write'}}" class="btn btn-info">글쓰기-->
+                    <!--                <a class="btn btn-info" th:href="@{${base_url + '/board/post'}}">글쓰기-->
+                    <a class="btn btn-info" th:href="@{/board/post}">글쓰기</a>
+                </div>
+                <div class="row">
+                    <span class="sub-link__item my-auto">최신</span>
+                    <span class="sub-link__item my-auto">인기</span>
+
+                    <div class="sub-header-search my-auto">
+                        <form th:action="@{${'/board/'+type+'/search'}}" th:method="get">
+                            <label>
+                                <select class="sub-header-search__select" name="target">
+                                    <option value="title">제목</option>
+                                    <option value="user">작성자</option>
+                                </select>
+                            </label>
+                            <input class="sub-header-search__input" id="search-input" name="q" placeholder="검색"
+                                   type="text">
+                            <a class="sub-header-search__button" href="#">
+                                <img alt="검색"
+                                     src="https://economy-bucket.s3.ap-northeast-2.amazonaws.com/search.png"
+                                     width="24">
+                            </a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
             <div class="border bg-white article-not-found">
                 <img alt src="https://economy-bucket.s3.ap-northeast-2.amazonaws.com/not-found.png" width="80">
                 <div class="article-delete__message">게시물이 삭제되었거나 찾을 수 없습니다.</div>

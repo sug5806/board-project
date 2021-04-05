@@ -8,6 +8,7 @@ spring:
     username: root
     password: ghd9413
     driver-class-name: com.mysql.cj.jdbc.Driver
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -16,7 +17,11 @@ spring:
         show_sql: true
         format_sql: true
         use_sql_comments: true
+
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html
     cache: false
+
+  loggin.level:
+    org.hibernate.SQL: debug

@@ -2,6 +2,7 @@ package com.example.board.controller.post;
 
 import com.example.board.dto.PostDTO;
 import com.example.board.entity.Post;
+import com.example.board.entity.PostCategory;
 import com.example.board.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -41,10 +42,23 @@ public class PostController {
 
     @GetMapping("/board/{type}")
     public String postList(@PathVariable(name = "type") String boardType, Model model) {
-        List<PostDTO> postList = postService.allPost(boardType);
+        List<PostDTO> postList = postService.postList(PostCategory.convertToCategory(boardType));
 
         model.addAttribute("post_list", postList);
         model.addAttribute("base_url", "http://localhost:8080");
+        model.addAttribute("type", boardType);
+        return "post/post_list";
+    }
+
+    @GetMapping("/board/{type}/search")
+    public String postList(
+            @PathVariable(name = "type") String boardType,
+            @RequestParam(name = "target") String target,
+            @RequestParam(name = "q") String title,
+            Model model) {
+        List<PostDTO> postList = postService.postSearchList(PostCategory.convertToCategory(boardType), target, title);
+
+        model.addAttribute("post_list", postList);
         model.addAttribute("type", boardType);
         return "post/post_list";
     }
@@ -56,7 +70,6 @@ public class PostController {
         model.addAttribute("type", postDTO.getCategory());
 
         return "post/post";
-
     }
 
     @GetMapping("/post/{id}/edit")

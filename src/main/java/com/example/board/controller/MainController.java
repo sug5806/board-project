@@ -1,6 +1,7 @@
 package com.example.board.controller;
 
 import com.example.board.dto.PostDTO;
+import com.example.board.entity.PostCategory;
 import com.example.board.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -17,12 +18,10 @@ public class MainController {
 
     @GetMapping("/")
     public String Main(Model model) {
-        // TODO: 카테고리 ENUM으로 변경하기
-        List<PostDTO> freePostList = postService.allPost("free");
+        List<PostDTO> freePostList = postService.postList(PostCategory.FREE);
 
         model.addAttribute("type", "free");
         model.addAttribute("post_list", freePostList);
-        model.addAttribute("base_url", "http://localhost:8080");
-        return "main";
+        return "redirect:/board/free";
     }
 }
