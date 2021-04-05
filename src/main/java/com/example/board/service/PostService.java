@@ -3,30 +3,26 @@ package com.example.board.service;
 import com.example.board.config.custom_exception.PostNotFoundException;
 import com.example.board.dto.CommentDTO;
 import com.example.board.dto.PostDTO;
+import com.example.board.dto.SearchDTO;
 import com.example.board.dto.UserDTO;
-import com.example.board.entity.*;
+import com.example.board.entity.Comment;
+import com.example.board.entity.Post;
+import com.example.board.entity.PostCategory;
+import com.example.board.entity.User;
 import com.example.board.repository.PostRepository;
 import com.example.board.repository.UserRepository;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
 import javax.management.OperationsException;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static com.example.board.entity.QPost.post;
-import static com.example.board.entity.QUser.user;
 
 @Service
 @RequiredArgsConstructor
@@ -35,17 +31,6 @@ import static com.example.board.entity.QUser.user;
 public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
-
-    private final QPost qPost = post;
-    private final QUser qUser = user;
-    @PersistenceContext
-    private EntityManager entityManager;
-    private JPAQueryFactory queryFactory;
-
-    @PostConstruct
-    private void init() {
-        queryFactory = new JPAQueryFactory(entityManager);
-    }
 
     @Transactional
     public Post createPost(PostDTO postDTO, Principal principal) {
@@ -66,13 +51,7 @@ public class PostService {
     }
 
     public List<PostDTO> postList(PostCategory category) {
-        List<Post> postList = queryFactory
-                .selectFrom(qPost)
-                .where(qPost.category.eq(category))
-                .orderBy(qPost.id.desc())
-                .fetch();
-
-        return convertToPostDTOList(postList);
+        return postRepository.postList(category);
     }
 
     @Transactional
@@ -111,55 +90,9 @@ public class PostService {
         return post.getCategory().toString().toLowerCase();
     }
 
-    public List<PostDTO> postSearchList(PostCategory postCategory, String target, String title) {
-        List<Post> postList = new ArrayList<>();
+    public List<PostDTO> postSearchList(SearchDTO searchDTO) {
+        return postRepository.postSearchList(searchDTO);
 
-        if (target.equals("title")) {
-            postList = searchByPostTitle(postCategory, title);
-        } else if (target.equals("user")) {
-            postList = searchByUsername(postCategory, title);
-        }
-
-        return convertToPostDTOList(postList);
-    }
-
-    private List<Post> searchByPostTitle(PostCategory postCategory, String title) {
-        return queryFactory
-                .selectFrom(qPost)
-                .where(qPost.title.contains(title), qPost.category.eq(postCategory))
-                .fetch();
-
-    }
-
-    private List<Post> searchByUsername(PostCategory postCategory, String userNickname) {
-        return queryFactory
-                .selectFrom(qPost)
-                .join(qPost.user, qUser).fetchJoin()
-                .where(qUser.name.eq(userNickname))
-                .where(qPost.category.eq(postCategory))
-                .fetch();
-    }
-
-    private List<PostDTO> convertToPostDTOList(List<Post> postList) {
-        Stream<Post> stream = postList.stream();
-
-        Stream<PostDTO> dtoStream = stream.map(post ->
-                PostDTO.builder()
-                        .id(post.getId())
-                        .title(post.getTitle())
-                        .contents(post.getContents())
-                        .viewCount(post.getViewCount())
-                        .likeCount(post.getLikeCount())
-                        .commentCount(post.getCommentCount())
-                        .creator("demo")
-                        .userDTO(UserDTO.builder()
-                                .id(post.getUser().getId())
-                                .nickname(post.getUser().getName())
-                                .build())
-                        .build()
-        );
-
-        return dtoStream.collect(Collectors.toList());
     }
 
     private PostDTO convertToPostDTO(Post foundPost) {

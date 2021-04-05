@@ -1,6 +1,7 @@
 package com.example.board.controller.post;
 
 import com.example.board.dto.PostDTO;
+import com.example.board.dto.SearchDTO;
 import com.example.board.entity.Post;
 import com.example.board.entity.PostCategory;
 import com.example.board.service.PostService;
@@ -53,10 +54,17 @@ public class PostController {
     @GetMapping("/board/{type}/search")
     public String postList(
             @PathVariable(name = "type") String boardType,
-            @RequestParam(name = "target") String target,
-            @RequestParam(name = "q") String title,
+            @RequestParam(name = "target") String searchType,
+            @RequestParam(name = "q") String query,
             Model model) {
-        List<PostDTO> postList = postService.postSearchList(PostCategory.convertToCategory(boardType), target, title);
+
+        SearchDTO searchDTO = SearchDTO.builder()
+                .postCategory(PostCategory.convertToCategory(boardType))
+                .searchType(searchType)
+                .query(query)
+                .build();
+
+        List<PostDTO> postList = postService.postSearchList(searchDTO);
 
         model.addAttribute("post_list", postList);
         model.addAttribute("type", boardType);
