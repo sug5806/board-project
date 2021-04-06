@@ -13,6 +13,8 @@ import com.example.board.repository.PostRepository;
 import com.example.board.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +28,7 @@ import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 @Slf4j
 public class PostService {
     private final PostRepository postRepository;
@@ -52,6 +54,18 @@ public class PostService {
 
     public List<PostDTO> postList(PostCategory category) {
         return postRepository.postList(category);
+    }
+
+    public Page<PostDTO> postListPaging(PostCategory category, Pageable pageable) {
+        return postRepository.findAllByCategory(category, pageable).map(post ->
+                PostDTO.builder()
+                        .id(post.getId())
+                        .title(post.getTitle())
+                        .creator(post.getUser().getName())
+                        .contents(post.getContents())
+                        .viewCount(post.getViewCount())
+                        .build()
+        );
     }
 
     @Transactional

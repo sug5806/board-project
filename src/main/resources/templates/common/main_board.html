@@ -6,7 +6,7 @@
 
     <section class="article-list article-list--compact">
 
-        <article class="article-list-item" th:each="post : ${post_list}">
+        <article class="article-list-item" th:each="post : ${post_list.getContent()}">
             <div class="article-list-item__content">
                 <div class="article-list-item__vote">
                     <img src="https://economy-bucket.s3.ap-northeast-2.amazonaws.com/up.png">

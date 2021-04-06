@@ -55,6 +55,8 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         return convertToPostDTOList(postList);
     }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     private List<Post> searchByPostTitle(PostCategory postCategory, String title) {
         return queryFactory
                 .selectFrom(post)

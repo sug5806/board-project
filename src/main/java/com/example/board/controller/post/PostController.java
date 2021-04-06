@@ -1,11 +1,14 @@
 package com.example.board.controller.post;
 
+import com.example.board.common.PageRequest;
 import com.example.board.dto.PostDTO;
 import com.example.board.dto.SearchDTO;
 import com.example.board.entity.Post;
 import com.example.board.entity.PostCategory;
+import com.example.board.repository.PostRepository;
 import com.example.board.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +27,7 @@ import java.util.List;
 public class PostController {
 
     private final PostService postService;
+    private final PostRepository postRepository;
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/board/post")
@@ -42,10 +46,10 @@ public class PostController {
     }
 
     @GetMapping("/board/{type}")
-    public String postList(@PathVariable(name = "type") String boardType, Model model) {
-        List<PostDTO> postList = postService.postList(PostCategory.convertToCategory(boardType));
+    public String postList(@PathVariable(name = "type") String boardType, Model model, PageRequest pageable) {
+        Page<PostDTO> postListPaging = postService.postListPaging(PostCategory.convertToCategory(boardType), pageable.of());
 
-        model.addAttribute("post_list", postList);
+        model.addAttribute("post_list", postListPaging);
         model.addAttribute("base_url", "http://localhost:8080");
         model.addAttribute("type", boardType);
         return "post/post_list";
