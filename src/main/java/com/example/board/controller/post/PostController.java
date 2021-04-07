@@ -5,7 +5,6 @@ import com.example.board.dto.PostDTO;
 import com.example.board.dto.SearchDTO;
 import com.example.board.entity.Post;
 import com.example.board.entity.PostCategory;
-import com.example.board.repository.PostRepository;
 import com.example.board.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,7 +26,6 @@ import java.util.List;
 public class PostController {
 
     private final PostService postService;
-    private final PostRepository postRepository;
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/board/post")
@@ -47,7 +45,7 @@ public class PostController {
 
     @GetMapping("/board/{type}")
     public String postList(@PathVariable(name = "type") String boardType, Model model, PageRequest pageable) {
-        Page<PostDTO> postListPaging = postService.postListPaging(PostCategory.convertToCategory(boardType), pageable.of());
+        Page<PostDTO.ConvertToPostDTO> postListPaging = postService.postListPaging(PostCategory.convertToCategory(boardType), pageable.of());
 
         model.addAttribute("post_list", postListPaging);
         model.addAttribute("base_url", "http://localhost:8080");

@@ -39,7 +39,7 @@ public class PostService {
 
         Optional<User> byEmail = userRepository.findByEmail(principal.getName());
 
-        User user = byEmail.orElseThrow(() -> new UsernameNotFoundException("아이디나 비밀번호가 틀립니다."));
+        User user = byEmail.orElseThrow(() -> new UsernameNotFoundException(""));
 
         Post post = Post.builder()
                 .title(postDTO.getTitle())
@@ -56,16 +56,8 @@ public class PostService {
         return postRepository.postList(category);
     }
 
-    public Page<PostDTO> postListPaging(PostCategory category, Pageable pageable) {
-        return postRepository.findAllByCategory(category, pageable).map(post ->
-                PostDTO.builder()
-                        .id(post.getId())
-                        .title(post.getTitle())
-                        .creator(post.getUser().getName())
-                        .contents(post.getContents())
-                        .viewCount(post.getViewCount())
-                        .build()
-        );
+    public Page<PostDTO.ConvertToPostDTO> postListPaging(PostCategory category, Pageable pageable) {
+        return postRepository.findAllByCategory(category, pageable).map(PostDTO.ConvertToPostDTO::new);
     }
 
     @Transactional
