@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.management.OperationsException;
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -58,6 +57,7 @@ public class PostController {
             @PathVariable(name = "type") String boardType,
             @RequestParam(name = "target") String searchType,
             @RequestParam(name = "q") String query,
+            PageRequest pageable,
             Model model) {
 
         SearchDTO searchDTO = SearchDTO.builder()
@@ -66,10 +66,14 @@ public class PostController {
                 .query(query)
                 .build();
 
-        List<PostDTO> postList = postService.postSearchList(searchDTO);
+//        List<PostDTO> postList = postService.postSearchList(searchDTO);
+        Page<PostDTO> postDTOPage = postService.postSearchListPaging(searchDTO, pageable.of());
 
-        model.addAttribute("post_list", postList);
+        model.addAttribute("post_list", postDTOPage);
         model.addAttribute("type", boardType);
+        model.addAttribute("is_search", true);
+        model.addAttribute("target", searchType);
+        model.addAttribute("query", query);
         return "post/post_list";
     }
 

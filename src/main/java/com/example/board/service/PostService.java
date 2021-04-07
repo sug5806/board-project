@@ -98,7 +98,10 @@ public class PostService {
 
     public List<PostDTO> postSearchList(SearchDTO searchDTO) {
         return postRepository.postSearchList(searchDTO);
+    }
 
+    public Page<PostDTO> postSearchListPaging(SearchDTO searchDTO, Pageable pageable) {
+        return postRepository.postSearchListPaging(searchDTO, pageable);
     }
 
     private PostDTO convertToPostDTO(Post foundPost) {
