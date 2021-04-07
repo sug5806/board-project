@@ -31,7 +31,14 @@
         </article>
     </section>
 
-    <div th:replace="common/pagination :: paging"></div>
+    <div th:if="${post_list.totalElements} > 1">
+        <div th:replace="common/pagination :: paging"></div>
+    </div>
+
+    <div th:unless="${post_list.totalElements} < 1">
+
+    </div>
+
 
 </div>
 
