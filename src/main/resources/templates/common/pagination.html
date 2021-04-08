@@ -4,7 +4,7 @@
 <body>
 
 <div class="page-navigation" th:fragment="paging" th:object="${post_list}">
-    <nav th:if="${is_search == false}">
+    <nav th:if="${is_search == null}">
         <ul class="pagination justify-content-center"
             th:with="start=${T(Math).floor(post_list.number/10) * 10 + 1},
                 last=(${start + 9 < post_list.totalPages ? start + 9 : post_list.totalPages})">
@@ -43,7 +43,7 @@
         </ul>
     </nav>
 
-    <nav th:unless="${is_search == false}">
+    <nav th:unless="${is_search == null}">
         <ul class="pagination justify-content-center"
             th:with="start=${T(Math).floor(post_list.number/10) * 10 + 1},
                 last=(${start + 9 < post_list.totalPages ? start + 9 : post_list.totalPages})">

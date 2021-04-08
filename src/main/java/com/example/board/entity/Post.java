@@ -43,6 +43,9 @@ public class Post extends BaseEntity {
     @OneToMany(fetch = LAZY, mappedBy = "post")
     private List<Comment> comments = new ArrayList<>();
 
+    @OneToMany(fetch = LAZY, mappedBy = "post")
+    private List<PostLike> postLikes = new ArrayList<>();
+
     public void changeTitle(String title) {
         this.title = title;
     }
@@ -62,5 +65,13 @@ public class Post extends BaseEntity {
 
     public void mappingComment(Comment comment) {
         this.comments.add(comment);
+    }
+
+    public void mappingPostLike(PostLike postLike) {
+        this.postLikes.add(postLike);
+    }
+
+    public void updateLikeCount() {
+        this.likeCount = (long) postLikes.size();
     }
 }

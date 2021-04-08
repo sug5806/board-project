@@ -21,7 +21,7 @@
                 </div>
                 <div class="article-list-item-meta">
                     <div class="article-list-item-meta__item article-list-item-meta__item--date">
-                        <span>1</span>
+                        <span th:text="${post.getCreatedAt()}"></span>
                     </div>
                     <div class="article-list-item-meta__item article-list-item-meta__item--author">
                         <a href="#" th:text="${post.getUserDTO().getNickname()}"></a>
@@ -38,8 +38,6 @@
     <div th:unless="${post_list.totalElements} < 1">
 
     </div>
-
-
 </div>
 
 </body>

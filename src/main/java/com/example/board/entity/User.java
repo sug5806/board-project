@@ -38,6 +38,9 @@ public class User extends DateTimeEntity {
     @OneToMany(fetch = LAZY, mappedBy = "user")
     private List<Comment> comments = new ArrayList<>();
 
+    @OneToMany(fetch = LAZY, mappedBy = "user")
+    private List<PostLike> postLikes = new ArrayList<>();
+
     public void clearPassword() {
         this.password = null;
     }
@@ -52,6 +55,10 @@ public class User extends DateTimeEntity {
 
     public void mappingComment(Comment comment) {
         this.comments.add(comment);
+    }
+
+    public void mappingPostLike(PostLike postLike) {
+        this.postLikes.add(postLike);
     }
 }
 

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+<div class="comment-wrap" th:fragment="comment">
+    <div class="comment-header">
+        <h2 class="comment__title">댓글</h2>
+        <span class="comment__count">
+                            총
+                            <em th:text="${post.getCommentCount()}"></em>
+                            개
+                        </span>
+    </div>
+    <div class="comment-write">
+        <form method="post" th:action="@{${'~/post/'+post.getId()+'/comment'}}">
+            <div class="comment-write-inner">
+                <div class="comment-write__name"></div>
+                <div class="comment-write__content">
+                                    <textarea maxlength="1000" name="contents"
+                                              placeholder="댓글을 작성해 주세요. 작성자에게 큰 힘이 됩니다."
+                                              style="overflow: hidden; overflow-wrap: break-word; height: 44px;"></textarea>
+                </div>
+                <div class="comment-write-footer">
+                    <div class="comment-write-length"></div>
+                    <div class="comment-write-submit">
+                        <button class="button button--green" type="submit">작성</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="comment" th:each="comment : ${post.getComments()}">
+        <div class="comment-meta">
+                                   <span class="comment__name comment__name--writer">
+                                       <a
+                                               th:href="@{~+'/board/'+${post.getCategory().name()}(q=${post.getUserDTO().getId()},target='user_id')}"
+                                               th:text="${comment.getUser().getNickname()}"
+                                       >
+
+                                       </a>
+                                   </span>
+        </div>
+        <div class="comment-content">
+            <p th:text="${comment.getContents()}"></p>
+        </div>
+        <div class="comment-button"
+             th:if="${comment.getUser().getEmail() == #authentication.getName()}">
+            <ul>
+                <li>
+                    <button class="comment__button comment__button--red"
+                            th:onclick="deleteComment([[${post.getId()}]],[[${comment.getId()}]])"
+
+                            type="button"
+                    >
+                        삭제
+                    </button>
+                </li>
+
+                <!--                                            th:attr="onclick=|deleteComment('${comment.getId()}')|"-->
+                <!--                                <li>-->
+                <!--                                    <button class="comment__button" type="button"-->
+                <!--                                            th:attr="onclick=|deleteComment('${comment.getId()}')|">-->
+                <!--                                        <img alt-->
+                <!--                                             src="https://economy-bucket.s3.ap-northeast-2.amazonaws.com/reply.png"-->
+                <!--                                             width="16">-->
+                <!--                                        답글 쓰기-->
+                <!--                                    </button>-->
+                <!--                                </li>-->
+            </ul>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

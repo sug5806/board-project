@@ -25,8 +25,11 @@
                         <div class="article-meta">
                             <div class="article-meta-list">
                                 <div class="article-list-item-meta__item">
-                                    <a th:href="@{/board/{type}(type=${post.getCategory()})}"
+                                    <a th:href="@{/board/{type}(type=${post.getCategory().getCategory()})}"
                                        th:text="${post.getCategory().getTitle()}"></a>
+                                </div>
+                                <div class="article-list-item-meta__item" th:text="${post.getCreatedAt()}">
+
                                 </div>
                                 <div class="article-list-item-meta__item">
                                     <a href="#"
@@ -39,7 +42,6 @@
                                     <span th:text="${'조회 ' + post.getViewCount()}"></span>
                                 </div>
                                 <div class="article-meta__item">
-                                    <!--                                <span th:text="댓글 ${post.getCommentCount()}"></span>-->
                                     <span th:text="${'댓글 ' + post.getCommentCount()}"></span>
                                 </div>
                                 <div class="article-meta__item">
@@ -68,81 +70,19 @@
                     <div class="article-content-wrap">
                         <div class="article-content" th:utext="${post.getContents()}"></div>
                     </div>
-                    <div class="article-box">
-                        <div id="postVote">
-                            <div class="article-vote"></div>
-                        </div>
+
+                </div>
+
+                <div class="article-box">
+                    <div class="article-vote">
+                        <button class="article-vote__button button" onclick="clickBoard()" type="submit">
+                            <span class="article-vote__up-arrow" id="vote-arrow"></span>
+                            <span class="article-vote__up-count" th:text="${post.getLikeCount()}"></span>
+                        </button>
                     </div>
                 </div>
-                <div class="comment-wrap">
-                    <div class="comment-header">
-                        <h2 class="comment__title">댓글</h2>
-                        <span class="comment__count">
-                            총
-                            <em th:text="${post.getCommentCount()}"></em>
-                            개
-                        </span>
-                    </div>
-                    <div class="comment-write">
-                        <form method="post" th:action="@{${'~/post/'+post.getId()+'/comment'}}">
-                            <div class="comment-write-inner">
-                                <div class="comment-write__name"></div>
-                                <div class="comment-write__content">
-                                    <textarea maxlength="1000" name="contents"
-                                              placeholder="댓글을 작성해 주세요. 작성자에게 큰 힘이 됩니다."
-                                              style="overflow: hidden; overflow-wrap: break-word; height: 44px;"></textarea>
-                                </div>
-                                <div class="comment-write-footer">
-                                    <div class="comment-write-length"></div>
-                                    <div class="comment-write-submit">
-                                        <button class="button button--green" type="submit">작성</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
 
-                    <div class="comment" th:each="comment : ${post.getComments()}">
-                        <div class="comment-meta">
-                                   <span class="comment__name comment__name--writer">
-                                       <a
-                                               th:href="@{~+'/board/'+${post.getCategory().name()}(q=${post.getUserDTO().getId()},target='user_id')}"
-                                               th:text="${comment.getUser().getNickname()}"
-                                       >
-
-                                       </a>
-                                   </span>
-                        </div>
-                        <div class="comment-content">
-                            <p th:text="${comment.getContents()}"></p>
-                        </div>
-                        <div class="comment-button"
-                             th:if="${comment.getUser().getEmail() == #authentication.getName()}">
-                            <ul>
-                                <li>
-                                    <button class="comment__button comment__button--red"
-                                            th:onclick="deleteComment([[${post.getId()}]],[[${comment.getId()}]])"
-
-                                            type="button"
-                                    >
-                                        삭제
-                                    </button>
-                                </li>
-
-                                <!--                                            th:attr="onclick=|deleteComment('${comment.getId()}')|"-->
-                                <!--                                <li>-->
-                                <!--                                    <button class="comment__button" type="button"-->
-                                <!--                                            th:attr="onclick=|deleteComment('${comment.getId()}')|">-->
-                                <!--                                        <img alt-->
-                                <!--                                             src="https://economy-bucket.s3.ap-northeast-2.amazonaws.com/reply.png"-->
-                                <!--                                             width="16">-->
-                                <!--                                        답글 쓰기-->
-                                <!--                                    </button>-->
-                                <!--                                </li>-->
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+                <div th:replace="common/comment :: comment"></div>
 
             </div>
         </div>
@@ -161,10 +101,44 @@
 
             $("body").append(html);
             document.deleteForm.submit();
-        } else {
-            alert("노우");
         }
     }
+
+    function clickBoard() {
+        const obj = document.getElementById("vote-arrow");
+        const id = [[${post.getId()}]]
+
+        if (obj.classList.contains("article-vote__up-arrow--on")) {
+            const url = "/post/" + id + "/dislike"
+
+            $.ajax({
+                url: url,
+                data: null,
+                type: "POST"
+            }).done(function (fragment) {
+                const voted = [[${is_voted}]]
+                alert(voted);
+                obj.classList.remove("article-vote__up-arrow--on");
+            }).error(function () {
+                alert("잠시후 다시 요청해주세요.")
+            })
+
+        } else {
+            const url = "/post/" + id + "/like"
+
+            $.ajax({
+                url: url,
+                type: "GET"
+            }).done(function (fragment) {
+                const voted = [[${is_voted}]]
+                alert(voted);
+                obj.classList.add("article-vote__up-arrow--on");
+            }).error(function () {
+                alert("잠시후 다시 요청해주세요.")
+            })
+        }
+    }
+
 </script>
 
 </body>

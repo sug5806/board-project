@@ -3,6 +3,7 @@ package com.example.board.controller.post;
 import com.example.board.common.PageRequest;
 import com.example.board.dto.PostDTO;
 import com.example.board.dto.SearchDTO;
+import com.example.board.dto.Test;
 import com.example.board.entity.Post;
 import com.example.board.entity.PostCategory;
 import com.example.board.service.PostService;
@@ -11,14 +12,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.management.OperationsException;
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -43,7 +42,10 @@ public class PostController {
     }
 
     @GetMapping("/board/{type}")
-    public String postList(@PathVariable(name = "type") String boardType, Model model, PageRequest pageable) {
+    public String postList(
+            @PathVariable(name = "type") String boardType,
+            Model model,
+            PageRequest pageable) {
         Page<PostDTO.ConvertToPostDTO> postListPaging = postService.postListPaging(PostCategory.convertToCategory(boardType), pageable.of());
 
         model.addAttribute("post_list", postListPaging);
@@ -66,8 +68,7 @@ public class PostController {
                 .query(query)
                 .build();
 
-//        List<PostDTO> postList = postService.postSearchList(searchDTO);
-        Page<PostDTO> postDTOPage = postService.postSearchListPaging(searchDTO, pageable.of());
+        Page<PostDTO.ConvertToPostDTO> postDTOPage = postService.postSearchListPaging(searchDTO, pageable.of());
 
         model.addAttribute("post_list", postDTOPage);
         model.addAttribute("type", boardType);
@@ -116,13 +117,27 @@ public class PostController {
         return "redirect:/board/" + postCategory;
     }
 
-//    @GetMapping("/board/{type}")
-//    public String postList(@PathVariable(name = "type") String boardType, Model model) {
-//        List<PostDTO> postList = postService.allPost(boardType);
-//
-//        model.addAttribute("post_list", postList);
-////        model.addAttribute("base_url", "http://localhost:8080");
-//        model.addAttribute("type", boardType);
-//        return "main :: #pList";
-//    }
+    @GetMapping("/post/{id}/like")
+    @PreAuthorize("isAuthenticated()")
+    public String postLike(@PathVariable(name = "id") Long id,
+                           Principal principal,
+                           @RequestBody Test test,
+                           Model model) {
+
+        Map<String, Boolean> map = postService.postLike(id, principal);
+
+        model.addAttribute("is_voted", map.get("is_voted"));
+
+        return "post/post :: #vote-arrow";
+    }
+
+    @PostMapping("/post/{id}/dislike")
+    @PreAuthorize("isAuthenticated()")
+    public String postDisLike(@PathVariable(name = "id") Long id,
+                              Model model,
+                              Principal principal) {
+        postService.postDisLike(id, principal);
+
+        return "post/post :: #vote-arrow";
+    }
 }

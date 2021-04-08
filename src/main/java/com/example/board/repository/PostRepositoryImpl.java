@@ -1,22 +1,23 @@
 package com.example.board.repository;
 
-import com.example.board.dto.PostDTO;
 import com.example.board.dto.SearchDTO;
-import com.example.board.dto.UserDTO;
 import com.example.board.entity.Post;
 import com.example.board.entity.PostCategory;
 import com.example.board.entity.SearchType;
+import com.example.board.util.QueryDslUtil;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.example.board.entity.QPost.post;
 import static com.example.board.entity.QUser.user;
@@ -32,34 +33,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     }
 
     @Override
-    public List<PostDTO> postSearchList(SearchDTO searchDTO) {
-        List<Post> postList = null;
-        SearchType searchType = SearchType.convertToType(searchDTO.getSearchType());
-        switch (searchType) {
-            case USER:
-                postList = searchByUsername(searchDTO.getPostCategory(), searchDTO.getQuery());
-                break;
-            case TITLE:
-                postList = searchByPostTitle(searchDTO.getPostCategory(), searchDTO.getQuery());
-                break;
-        }
-
-        return convertToPostDTOList(postList);
-    }
-
-    @Override
-    public List<PostDTO> postList(PostCategory postCategory) {
-        List<Post> postList = queryFactory
-                .selectFrom(post)
-                .where(post.category.eq(postCategory))
-                .orderBy(post.id.desc())
-                .fetch();
-
-        return convertToPostDTOList(postList);
-    }
-
-    @Override
-    public Page<PostDTO> postSearchListPaging(SearchDTO searchDTO, Pageable pageable) {
+    public Page<Post> postSearchListPaging(SearchDTO searchDTO, Pageable pageable) {
         List<Post> postList = null;
         long total = 0L;
         SearchType searchType = SearchType.convertToType(searchDTO.getSearchType());
@@ -74,12 +48,55 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 break;
         }
 
-        List<PostDTO> postDTOS = convertToPostDTOList(postList);
+        return new PageImpl<>(postList, pageable, total);
+    }
 
-        return new PageImpl<>(postDTOS, pageable, total);
+    @Override
+    public Page<Post> postList(PostCategory postCategory, Pageable pageable) {
+        List<OrderSpecifier> orderSpecifiers = sortingCondition(pageable.getSort());
+
+        List<Post> postList = queryFactory
+                .selectFrom(post)
+                .orderBy(orderSpecifiers.toArray(OrderSpecifier[]::new))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        long totalCount = queryFactory
+                .selectFrom(post)
+                .orderBy(orderSpecifiers.toArray(OrderSpecifier[]::new))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchCount();
+
+        return new PageImpl<>(postList, pageable, totalCount);
+
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    private List<OrderSpecifier> sortingCondition(Sort sort) {
+        List<OrderSpecifier> orders = new ArrayList<>();
+
+        if (!sort.isEmpty()) {
+            for (Sort.Order order : sort) {
+                Order direction = order.getDirection().isAscending() ? Order.ASC : Order.DESC;
+
+                switch (order.getProperty()) {
+                    case "popular":
+                        OrderSpecifier<?> orderPopular = QueryDslUtil.getSortedColumn(direction, post, "likeCount");
+                        orders.add(orderPopular);
+                        break;
+                    default:
+                        OrderSpecifier<?> orderCreatedAt = QueryDslUtil.getSortedColumn(direction, post, "createdAt");
+                        orders.add(orderCreatedAt);
+                        break;
+                }
+            }
+        }
+
+        return orders;
+    }
 
     private List<Post> searchByPostTitle(PostCategory postCategory, String title) {
         return queryFactory
@@ -139,27 +156,5 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetchCount();
-    }
-
-    private List<PostDTO> convertToPostDTOList(List<Post> postList) {
-        Stream<Post> stream = postList.stream();
-
-        Stream<PostDTO> dtoStream = stream.map(post ->
-                PostDTO.builder()
-                        .id(post.getId())
-                        .title(post.getTitle())
-                        .contents(post.getContents())
-                        .viewCount(post.getViewCount())
-                        .likeCount(post.getLikeCount())
-                        .commentCount(post.getCommentCount())
-                        .creator("demo")
-                        .userDTO(UserDTO.builder()
-                                .id(post.getUser().getId())
-                                .nickname(post.getUser().getName())
-                                .build())
-                        .build()
-        );
-
-        return dtoStream.collect(Collectors.toList());
     }
 }

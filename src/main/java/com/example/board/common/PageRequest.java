@@ -13,9 +13,9 @@ public class PageRequest {
     private int page = 1;
     private int size = 15;
     private Sort.Direction direction = Sort.Direction.DESC;
-    private String orderBy = "createdAt";
+    private String sort = "createdAt";
 
     public org.springframework.data.domain.PageRequest of() {
-        return org.springframework.data.domain.PageRequest.of(page - 1, size, direction, orderBy);
+        return org.springframework.data.domain.PageRequest.of(page - 1, size, direction, sort);
     }
 }

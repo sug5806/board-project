@@ -581,6 +581,55 @@
             margin-top: 16px;
         }
 
+        .article-box {
+            border-top: 1px solid #ebeef1;
+            border-bottom: 1px solid #ebeef1;
+            text-align: center
+        }
+
+        .article-box > div {
+            display: inline-block;
+            vertical-align: middle
+        }
+
+        .article-vote, .article-ward {
+            padding: 12px 0
+        }
+
+        .article-vote__button {
+            padding: 12px;
+            min-width: 88px;
+            line-height: 17px;
+            font-size: 14px;
+            height: 43px;
+            color: #1e2022;
+            margin-left: 8px
+        }
+
+        .article-vote__up-arrow {
+            width: 16px;
+            height: 16px;
+            background-image: url(https://economy-bucket.s3.ap-northeast-2.amazonaws.com/arrow.png);
+            background-repeat: no-repeat;
+            background-position: 0 0;
+            background-size: 16px;
+            line-height: 999px;
+            vertical-align: top;
+            overflow: hidden;
+            display: inline-block;
+            margin-top: 1px;
+            transition: all .5s
+        }
+
+        .article-vote__up-arrow--on {
+            background-image: url(https://economy-bucket.s3.ap-northeast-2.amazonaws.com/green_arrow.png)
+        }
+
+        .article-vote__up-count {
+            display: inline-block;
+            transition: all .3s;
+        }
+
         .comment-wrap {
             margin-top: 8px;
             margin-bottom: 8px;
