@@ -98,14 +98,6 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         return orders;
     }
 
-    private List<Post> searchByPostTitle(PostCategory postCategory, String title) {
-        return queryFactory
-                .selectFrom(post)
-                .where(post.title.contains(title), post.category.eq(postCategory))
-                .fetch();
-
-    }
-
     private List<Post> searchByPostTitlePaging(PostCategory postCategory, String title, Pageable pageable) {
         return queryFactory
                 .selectFrom(post)
@@ -123,16 +115,6 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetchCount();
-    }
-
-    private List<Post> searchByUsername(PostCategory postCategory, String userNickname) {
-        return queryFactory
-                .selectFrom(post)
-                .join(post.user, user).fetchJoin()
-                .where(user.name.contains(userNickname),
-                        post.category.eq(postCategory))
-                .where()
-                .fetch();
     }
 
     private List<Post> searchByUsernamePaging(PostCategory postCategory, String userNickname, Pageable pageable) {
