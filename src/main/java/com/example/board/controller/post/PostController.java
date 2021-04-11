@@ -3,7 +3,6 @@ package com.example.board.controller.post;
 import com.example.board.common.PageRequest;
 import com.example.board.dto.PostDTO;
 import com.example.board.dto.SearchDTO;
-import com.example.board.dto.Test;
 import com.example.board.entity.Post;
 import com.example.board.entity.PostCategory;
 import com.example.board.service.PostService;
@@ -12,7 +11,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.management.OperationsException;
 import javax.validation.Valid;
@@ -44,39 +46,48 @@ public class PostController {
     @GetMapping("/board/{type}")
     public String postList(
             @PathVariable(name = "type") String boardType,
+            @RequestParam(name = "type", defaultValue = "") String searchType,
+            @RequestParam(name = "query", defaultValue = "") String query,
             Model model,
             PageRequest pageable) {
-        Page<PostDTO.ConvertToPostDTO> postListPaging = postService.postListPaging(PostCategory.convertToCategory(boardType), pageable.of());
-
-        model.addAttribute("post_list", postListPaging);
-        model.addAttribute("base_url", "http://localhost:8080");
-        model.addAttribute("type", boardType);
-        return "post/post_list";
-    }
-
-    @GetMapping("/board/{type}/search")
-    public String postList(
-            @PathVariable(name = "type") String boardType,
-            @RequestParam(name = "target") String searchType,
-            @RequestParam(name = "q") String query,
-            PageRequest pageable,
-            Model model) {
 
         SearchDTO searchDTO = SearchDTO.builder()
-                .postCategory(PostCategory.convertToCategory(boardType))
-                .searchType(searchType)
+                .type(searchType)
                 .query(query)
                 .build();
 
-        Page<PostDTO.ConvertToPostDTO> postDTOPage = postService.postSearchListPaging(searchDTO, pageable.of());
+        Page<PostDTO.ConvertToPostDTO> postListPaging = postService.postListPaging(PostCategory.convertToCategory(boardType), searchDTO, pageable.of());
 
-        model.addAttribute("post_list", postDTOPage);
+        model.addAttribute("post_list", postListPaging);
         model.addAttribute("type", boardType);
-        model.addAttribute("is_search", true);
-        model.addAttribute("target", searchType);
-        model.addAttribute("query", query);
+        model.addAttribute("target", searchDTO.getType());
+        model.addAttribute("query", searchDTO.getQuery());
         return "post/post_list";
     }
+
+//    @GetMapping("/board/{type}/search")
+//    public String postList(
+//            @PathVariable(name = "type") String boardType,
+//            @RequestParam(name = "target") String searchType,
+//            @RequestParam(name = "q") String query,
+//            PageRequest pageable,
+//            Model model) {
+//
+//        SearchDTO searchDTO = SearchDTO.builder()
+//                .postCategory(PostCategory.convertToCategory(boardType))
+//                .searchType(searchType)
+//                .query(query)
+//                .build();
+//
+//        Page<PostDTO.ConvertToPostDTO> postDTOPage = postService.postSearchListPaging(searchDTO, pageable.of());
+//
+//        model.addAttribute("post_list", postDTOPage);
+//        model.addAttribute("type", boardType);
+//        model.addAttribute("is_search", true);
+//        model.addAttribute("target", searchType);
+//        model.addAttribute("query", query);
+//        return "post/post_list";
+//    }
 
     @GetMapping("/post/{id}")
     public String getPost(@PathVariable(name = "id") Long id, Model model) {
@@ -117,18 +128,17 @@ public class PostController {
         return "redirect:/board/" + postCategory;
     }
 
-    @GetMapping("/post/{id}/like")
+    @PostMapping("/post/{id}/like")
     @PreAuthorize("isAuthenticated()")
     public String postLike(@PathVariable(name = "id") Long id,
                            Principal principal,
-                           @RequestBody Test test,
                            Model model) {
 
         Map<String, Boolean> map = postService.postLike(id, principal);
 
         model.addAttribute("is_voted", map.get("is_voted"));
 
-        return "post/post :: #vote-arrow";
+        return "/post/post :: #article-vote";
     }
 
     @PostMapping("/post/{id}/dislike")

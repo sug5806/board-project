@@ -8,6 +8,8 @@ import com.example.board.util.QueryDslUtil;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.Builder;
+import lombok.Getter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -33,47 +35,37 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     }
 
     @Override
-    public Page<Post> postSearchListPaging(SearchDTO searchDTO, Pageable pageable) {
-        List<Post> postList = null;
-        long total = 0L;
-        SearchType searchType = SearchType.convertToType(searchDTO.getSearchType());
-        switch (searchType) {
-            case USER:
-                postList = searchByUsernamePaging(searchDTO.getPostCategory(), searchDTO.getQuery(), pageable);
-                total = searchByUsernamePagingTotal(searchDTO.getPostCategory(), searchDTO.getQuery(), pageable);
-                break;
-            case TITLE:
-                postList = searchByPostTitlePaging(searchDTO.getPostCategory(), searchDTO.getQuery(), pageable);
-                total = searchByPostTitlePagingTotal(searchDTO.getPostCategory(), searchDTO.getQuery(), pageable);
-                break;
-        }
+    public Page<Post> postList(PostCategory postCategory, SearchDTO searchDTO, Pageable pageable) {
 
-        return new PageImpl<>(postList, pageable, total);
-    }
-
-    @Override
-    public Page<Post> postList(PostCategory postCategory, Pageable pageable) {
-        List<OrderSpecifier> orderSpecifiers = sortingCondition(pageable.getSort());
-
-        List<Post> postList = queryFactory
-                .selectFrom(post)
-                .orderBy(orderSpecifiers.toArray(OrderSpecifier[]::new))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
-
-        long totalCount = queryFactory
-                .selectFrom(post)
-                .orderBy(orderSpecifiers.toArray(OrderSpecifier[]::new))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetchCount();
-
-        return new PageImpl<>(postList, pageable, totalCount);
-
+        return search(postCategory, searchDTO, pageable);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    private Page<Post> search(PostCategory postCategory, SearchDTO searchDTO, Pageable pageable) {
+        PostListPaging postListPaging;
+
+        List<OrderSpecifier> orderSpecifiers = sortingCondition(pageable.getSort());
+        SearchType searchType = SearchType.convertToType(searchDTO.getType());
+
+        PostListQueryCollect postListQueryCollect = PostListQueryCollect.builder()
+                .OrderCondition(orderSpecifiers)
+                .searchDTO(searchDTO)
+                .postCategory(postCategory)
+                .pageable(pageable)
+                .build();
+
+        switch (searchType) {
+            case USER:
+                postListPaging = searchByUsernamePaging(postListQueryCollect);
+                break;
+            default:
+                postListPaging = searchByOther(postListQueryCollect);
+                break;
+        }
+
+        return new PageImpl<>(postListPaging.postList, pageable, postListPaging.postTotalCount);
+    }
 
     private List<OrderSpecifier> sortingCondition(Sort sort) {
         List<OrderSpecifier> orders = new ArrayList<>();
@@ -98,45 +90,73 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         return orders;
     }
 
-    private List<Post> searchByPostTitlePaging(PostCategory postCategory, String title, Pageable pageable) {
-        return queryFactory
-                .selectFrom(post)
-                .where(post.title.contains(title), post.category.eq(postCategory))
-                .orderBy(post.createdAt.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
-    }
-
-    private Long searchByPostTitlePagingTotal(PostCategory postCategory, String title, Pageable pageable) {
-        return queryFactory
-                .selectFrom(post)
-                .where(post.title.contains(title), post.category.eq(postCategory))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetchCount();
-    }
-
-    private List<Post> searchByUsernamePaging(PostCategory postCategory, String userNickname, Pageable pageable) {
-        return queryFactory
+    private PostListPaging searchByUsernamePaging(PostListQueryCollect qc) {
+        List<Post> postList = queryFactory
                 .selectFrom(post)
                 .join(post.user, user).fetchJoin()
-                .where(user.name.contains(userNickname),
-                        post.category.eq(postCategory))
-                .offset(pageable.getOffset())
-                .orderBy(post.createdAt.desc())
-                .limit(pageable.getPageSize())
+                .where(user.name.contains(qc.getSearchDTO().getQuery()),
+                        post.category.eq(qc.getPostCategory()))
+                .offset(qc.getPageable().getOffset())
+                .orderBy(qc.getOrderCondition().toArray(OrderSpecifier[]::new))
+                .limit(qc.getPageable().getPageSize())
                 .fetch();
-    }
 
-    private Long searchByUsernamePagingTotal(PostCategory postCategory, String userNickname, Pageable pageable) {
-        return queryFactory
+        long count = queryFactory
                 .selectFrom(post)
                 .join(post.user, user).fetchJoin()
-                .where(user.name.contains(userNickname),
-                        post.category.eq(postCategory))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
+                .where(user.name.contains(qc.getSearchDTO().getQuery()),
+                        post.category.eq(qc.getPostCategory()))
+                .offset(qc.getPageable().getOffset())
+                .orderBy(qc.getOrderCondition().toArray(OrderSpecifier[]::new))
+                .limit(qc.getPageable().getPageSize())
                 .fetchCount();
+
+        return PostListPaging.builder()
+                .postList(postList)
+                .postTotalCount(count)
+                .build();
+    }
+
+
+    private PostListPaging searchByOther(PostListQueryCollect qc) {
+
+        List<Post> postList = queryFactory
+                .selectFrom(post)
+                .where(post.title.contains(qc.getSearchDTO().getQuery()), post.category.eq(qc.getPostCategory()))
+                .orderBy(qc.getOrderCondition().toArray(OrderSpecifier[]::new))
+                .offset(qc.getPageable().getOffset())
+                .limit(qc.getPageable().getPageSize())
+                .fetch();
+
+        long count = queryFactory
+                .selectFrom(post)
+                .where(post.title.contains(qc.getSearchDTO().getQuery()), post.category.eq(qc.getPostCategory()))
+                .orderBy(qc.getOrderCondition().toArray(OrderSpecifier[]::new))
+                .offset(qc.getPageable().getOffset())
+                .limit(qc.getPageable().getPageSize())
+                .fetchCount();
+
+        return PostListPaging.builder()
+                .postList(postList)
+                .postTotalCount(count)
+                .build();
+    }
+
+    @Builder
+    @Getter
+    private static class PostListPaging {
+        private List<Post> postList;
+        private Long postTotalCount;
+    }
+
+    @Builder
+    @Getter
+    private static class PostListQueryCollect {
+        private List<OrderSpecifier> OrderCondition;
+        private PostCategory postCategory;
+        private SearchDTO searchDTO;
+        private Pageable pageable;
     }
 }
+
+

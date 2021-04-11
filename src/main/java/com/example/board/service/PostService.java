@@ -57,8 +57,8 @@ public class PostService {
         return postRepository.save(post);
     }
 
-    public Page<PostDTO.ConvertToPostDTO> postListPaging(PostCategory category, Pageable pageable) {
-        return postRepository.postList(category, pageable).map(PostDTO.ConvertToPostDTO::new);
+    public Page<PostDTO.ConvertToPostDTO> postListPaging(PostCategory category, SearchDTO searchDTO, Pageable pageable) {
+        return postRepository.postList(category, searchDTO, pageable).map(PostDTO.ConvertToPostDTO::new);
     }
 
     @Transactional
@@ -97,9 +97,9 @@ public class PostService {
         return post.getCategory().toString().toLowerCase();
     }
 
-    public Page<PostDTO.ConvertToPostDTO> postSearchListPaging(SearchDTO searchDTO, Pageable pageable) {
-        return postRepository.postSearchListPaging(searchDTO, pageable).map(PostDTO.ConvertToPostDTO::new);
-    }
+//    public Page<PostDTO.ConvertToPostDTO> postSearchListPaging(SearchDTO searchDTO, Pageable pageable) {
+//        return postRepository.postSearchListPaging(searchDTO, pageable).map(PostDTO.ConvertToPostDTO::new);
+//    }
 
     @Transactional
     public Map<String, Boolean> postLike(Long id, Principal principal) {

@@ -19,14 +19,14 @@
         </span>
 
         <div class="sub-header-search my-auto">
-            <form th:action="@{${'/board/'+type+'/search'}}" th:method="get">
+            <form th:action="@{${'/board/'+type}}" th:method="get">
                 <label>
-                    <select class="sub-header-search__select" name="target">
+                    <select class="sub-header-search__select" name="type">
                         <option value="title">제목</option>
                         <option value="user">작성자</option>
                     </select>
                 </label>
-                <input class="sub-header-search__input" id="search-input" name="q" placeholder="검색"
+                <input class="sub-header-search__input" id="search-input" name="query" placeholder="검색"
                        type="text">
                 <a class="sub-header-search__button" href="#">
                     <img alt="검색"

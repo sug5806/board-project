@@ -7,10 +7,5 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface PostRepositoryCustom {
-
-//    List<PostDTO> postSearchList(SearchDTO searchDTO);
-
-    Page<Post> postSearchListPaging(SearchDTO searchDTO, Pageable pageable);
-
-    Page<Post> postList(PostCategory postCategory, Pageable pageable);
+    Page<Post> postList(PostCategory postCategory, SearchDTO searchDTO, Pageable pageable);
 }

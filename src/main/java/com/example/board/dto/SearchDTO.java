@@ -1,6 +1,5 @@
 package com.example.board.dto;
 
-import com.example.board.entity.PostCategory;
 import lombok.*;
 
 @Builder
@@ -8,9 +7,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class SearchDTO {
-    private String searchType;
+    private String type;
 
     private String query;
-
-    private PostCategory postCategory;
 }

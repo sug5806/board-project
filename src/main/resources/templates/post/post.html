@@ -74,9 +74,16 @@
                 </div>
 
                 <div class="article-box">
-                    <div class="article-vote">
-                        <button class="article-vote__button button" onclick="clickBoard()" type="submit">
-                            <span class="article-vote__up-arrow" id="vote-arrow"></span>
+                    <div class="article-vote" id="article-vote">
+                        <button class="article-vote__button button article-vote__up-arrow--on"
+                                onclick="clickBoardDisLike()" th:if="${post.is_voted  == true}" type="submit">
+                            <span class="article-vote__up-arrow"></span>
+                            <span class="article-vote__up-count" th:text="${post.getLikeCount()}"></span>
+                        </button>
+
+                        <button class="article-vote__button button" onclick="clickBoardLike()"
+                                th:unless="${post.is_voted  == true}" type="submit">
+                            <span class="article-vote__up-arrow"></span>
                             <span class="article-vote__up-count" th:text="${post.getLikeCount()}"></span>
                         </button>
                     </div>
@@ -104,39 +111,67 @@
         }
     }
 
-    function clickBoard() {
-        const obj = document.getElementById("vote-arrow");
+    function clickBoardLike() {
         const id = [[${post.getId()}]]
 
-        if (obj.classList.contains("article-vote__up-arrow--on")) {
-            const url = "/post/" + id + "/dislike"
+        const url = "/post/" + id + "/like"
 
-            $.ajax({
-                url: url,
-                data: null,
-                type: "POST"
-            }).done(function (fragment) {
-                const voted = [[${is_voted}]]
-                alert(voted);
-                obj.classList.remove("article-vote__up-arrow--on");
-            }).error(function () {
-                alert("잠시후 다시 요청해주세요.")
-            })
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: null,
+            success: function (data) {
+                alert("성공" + data);
+            },
+            error: function (error) {
+                alert(error);
+            }
+        })
 
-        } else {
-            const url = "/post/" + id + "/like"
+        // if (obj.classList.contains("article-vote__up-arrow--on")) {
+        //     const url = "/post/" + id + "/dislike"
+        //
+        //     $.ajax({
+        //         url: url,
+        //         data: null,
+        //         type: "POST"
+        //     }).done(function (fragment) {
+        //         obj.classList.remove("article-vote__up-arrow--on");
+        //     }).error(function () {
+        //         alert("잠시후 다시 요청해주세요.")
+        //     })
+        //
+        // } else {
+        //     const url = "/post/" + id + "/like"
+        //
+        //     $.ajax({
+        //         url: url,
+        //         type: "POST"
+        //     }).done(function (fragment) {
+        //         obj.classList.add("article-vote__up-arrow--on");
+        //     }).error(function () {
+        //         alert("잠시후 다시 요청해주세요.")
+        //     })
+        // }
+    }
 
-            $.ajax({
-                url: url,
-                type: "GET"
-            }).done(function (fragment) {
-                const voted = [[${is_voted}]]
-                alert(voted);
-                obj.classList.add("article-vote__up-arrow--on");
-            }).error(function () {
-                alert("잠시후 다시 요청해주세요.")
-            })
-        }
+    function clickBoardDisLike() {
+        const id = [[${post.getId()}]]
+
+        const url = "/post/" + id + "/dislike"
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: null,
+            success: function (data) {
+                alert("성공" + data);
+            },
+            error: function (error) {
+                alert(error);
+            }
+        })
+
     }
 
 </script>
