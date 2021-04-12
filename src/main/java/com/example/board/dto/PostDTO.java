@@ -94,6 +94,4 @@ public class PostDTO {
             return msg;
         }
     }
-
-
 }
