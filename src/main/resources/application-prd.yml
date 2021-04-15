@@ -1,13 +1,17 @@
 spring:
+  config:
+    activate:
+      on-profile: prd
+
   mvc:
     hiddenmethod:
       filter:
         enabled: false
 
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/board?autoReconnect=true&useUnicode=true&serverTimezone=UTC&characterEncoding=UTF8
-    username: root
-    password: ghd9413
+    url: jdbc:mysql://{rds}.cg2hxamogcbp.ap-northeast-2.rds.amazonaws.com:3306/board?autoReconnect=true&useUnicode=true&serverTimezone=UTC&characterEncoding=UTF8
+    username: ${username}
+    password: ${password}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -26,3 +30,6 @@ spring:
 
   loggin.level:
     org.hibernate.SQL: debug
+
+server:
+  port: 9090

@@ -21,23 +21,23 @@ public class LoginController {
 
     @GetMapping("/login")
     public String loginForm(@ModelAttribute("form") LoginDTO loginDTO) {
-        return "/login";
+        return "login";
     }
 
     @PostMapping("/login")
     public String loginFail(@ModelAttribute("form") LoginDTO loginDTO) {
-        return "/login";
+        return "login";
     }
 
     @GetMapping("/signup")
     public String singupForm(@ModelAttribute("form") SignupDTO signupDTO) {
-        return "/signup";
+        return "signup";
     }
 
     @PostMapping("/signup")
     public String singup(@Valid @ModelAttribute("form") SignupDTO signupDTO, BindingResult result) {
         if (result.hasErrors()) {
-            return "/signup";
+            return "signup";
         }
 
         UserDTO signup = userService.signup(signupDTO);

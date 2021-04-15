@@ -26,7 +26,7 @@ public class CommentController {
 
         CommentDTO comment = commentService.createComment(id, principal, commentDTO);
 
-        return "redirect:/post/" + id.toString();
+        return "redirect:post/" + id.toString();
     }
 
     @PostMapping("/post/{post_id}/comment/{comment_id}/delete")
@@ -36,6 +36,6 @@ public class CommentController {
             Principal principal) {
         commentService.deleteComment(commentId, principal);
 
-        return "redirect:/post/" + postId.toString();
+        return "redirect:post/" + postId.toString();
     }
 }

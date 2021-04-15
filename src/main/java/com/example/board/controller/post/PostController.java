@@ -40,7 +40,7 @@ public class PostController {
     @PreAuthorize("isAuthenticated()")
     public String createPost(@Valid PostDTO postDTO, Principal principal) {
         Post post = postService.createPost(postDTO, principal);
-        return "redirect:/board/" + post.getCategory().toString().toLowerCase();
+        return "redirect:board/" + post.getCategory().toString().toLowerCase();
     }
 
     @GetMapping("/board/{type}")
@@ -112,7 +112,7 @@ public class PostController {
     public String updatePost(@PathVariable(name = "id") Long id, @Valid PostDTO postDTO) {
         Post post = postService.updatePost(id, postDTO);
 
-        return "redirect:/post/" + post.getId();
+        return "redirect:post/" + post.getId();
     }
 
     @PostMapping("/post/{id}/delete")
@@ -125,7 +125,7 @@ public class PostController {
             return "main";
         }
 
-        return "redirect:/board/" + postCategory;
+        return "redirect:board/" + postCategory;
     }
 
     @PostMapping("/post/{id}/like")
@@ -138,7 +138,7 @@ public class PostController {
 
         model.addAttribute("is_voted", map.get("is_voted"));
 
-        return "/post/post :: #article-vote";
+        return "post/post :: #article-vote";
     }
 
     @PostMapping("/post/{id}/dislike")

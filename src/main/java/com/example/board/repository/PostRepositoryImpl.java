@@ -1,5 +1,6 @@
 package com.example.board.repository;
 
+import com.example.board.config.custom_exception.PostNotFoundException;
 import com.example.board.dto.SearchDTO;
 import com.example.board.entity.Post;
 import com.example.board.entity.PostCategory;
@@ -62,6 +63,11 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
             default:
                 postListPaging = searchByOther(postListQueryCollect);
                 break;
+        }
+
+        System.out.println("eeeeeeeeeeeee : " + postListPaging.postList.isEmpty());
+        if (postListPaging.postList.isEmpty()) {
+            throw new PostNotFoundException(1L);
         }
 
         return new PageImpl<>(postListPaging.postList, pageable, postListPaging.postTotalCount);

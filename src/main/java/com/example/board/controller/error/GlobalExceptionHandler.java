@@ -16,7 +16,7 @@ public class GlobalExceptionHandler extends RuntimeException {
 
     @ExceptionHandler(PostNotFoundException.class)
     public void handlerException(HttpServletRequest request, HttpServletResponse response, PostNotFoundException exception) throws ServletException, IOException {
-        request.getRequestDispatcher("/templates/error/404.html").forward(request, response);
+        request.getRequestDispatcher("templates/error/404.html").forward(request, response);
 
     }
 }
