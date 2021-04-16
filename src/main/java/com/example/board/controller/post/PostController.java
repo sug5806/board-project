@@ -40,7 +40,7 @@ public class PostController {
     @PreAuthorize("isAuthenticated()")
     public String createPost(@Valid PostDTO postDTO, Principal principal) {
         Post post = postService.createPost(postDTO, principal);
-        return "redirect:board/" + post.getCategory().toString().toLowerCase();
+        return "redirect:/board/" + post.getCategory().toString().toLowerCase();
     }
 
     @GetMapping("/board/{type}")
@@ -65,30 +65,6 @@ public class PostController {
         return "post/post_list";
     }
 
-//    @GetMapping("/board/{type}/search")
-//    public String postList(
-//            @PathVariable(name = "type") String boardType,
-//            @RequestParam(name = "target") String searchType,
-//            @RequestParam(name = "q") String query,
-//            PageRequest pageable,
-//            Model model) {
-//
-//        SearchDTO searchDTO = SearchDTO.builder()
-//                .postCategory(PostCategory.convertToCategory(boardType))
-//                .searchType(searchType)
-//                .query(query)
-//                .build();
-//
-//        Page<PostDTO.ConvertToPostDTO> postDTOPage = postService.postSearchListPaging(searchDTO, pageable.of());
-//
-//        model.addAttribute("post_list", postDTOPage);
-//        model.addAttribute("type", boardType);
-//        model.addAttribute("is_search", true);
-//        model.addAttribute("target", searchType);
-//        model.addAttribute("query", query);
-//        return "post/post_list";
-//    }
-
     @GetMapping("/post/{id}")
     public String getPost(@PathVariable(name = "id") Long id, Model model) {
         PostDTO postDTO = postService.getPost(id);
@@ -112,7 +88,7 @@ public class PostController {
     public String updatePost(@PathVariable(name = "id") Long id, @Valid PostDTO postDTO) {
         Post post = postService.updatePost(id, postDTO);
 
-        return "redirect:post/" + post.getId();
+        return "redirect:/post/" + post.getId();
     }
 
     @PostMapping("/post/{id}/delete")
@@ -125,7 +101,7 @@ public class PostController {
             return "main";
         }
 
-        return "redirect:board/" + postCategory;
+        return "redirect:/board/" + postCategory;
     }
 
     @PostMapping("/post/{id}/like")

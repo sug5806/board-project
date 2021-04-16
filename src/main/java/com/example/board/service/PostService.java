@@ -128,7 +128,7 @@ public class PostService {
 
                     postLikeRepository.save(postLike);
 
-                    map.put("is_voted", true);
+//                    map.put("is_voted", true);
                 });
 
         return map;
