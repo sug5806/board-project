@@ -26,23 +26,6 @@ public class FileService {
 
     private final AmazonS3Client amazonS3Client;
 
-//    private AmazonS3 amazonS3Client;
-//    @Value("${amazonProperties.accessKey}")
-//    private String accessKey;
-//    @Value("${amazonProperties.secretKey}")
-//    private String secretKey;
-//
-//    @PostConstruct
-//    private void init() {
-//        BasicAWSCredentials awsCredentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
-//
-//        amazonS3Client = AmazonS3ClientBuilder
-//                .standard()
-//                .withRegion(Regions.AP_NORTHEAST_2)
-//                .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
-//                .build();
-//    }
-
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 

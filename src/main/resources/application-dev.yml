@@ -41,6 +41,8 @@ cloud:
     region:
       static: ap-northeast-2
     credentials:
+      accessKey: ${accessKey}
+      secretKey: ${secretKey}
       use-default-aws-credentials-chain: false
       instance-profile: true
     stack:
