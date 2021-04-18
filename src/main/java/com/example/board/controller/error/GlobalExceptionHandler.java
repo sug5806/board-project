@@ -12,7 +12,7 @@ public class GlobalExceptionHandler extends RuntimeException {
     @ExceptionHandler(PostNotFoundException.class)
     public String PostNotFoundException(PostNotFoundException e) {
         log.error(e.getMessage());
-        return "/error/post_not_found.html";
+        return "error/post_not_found.html";
     }
 }
 

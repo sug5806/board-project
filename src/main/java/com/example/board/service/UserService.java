@@ -18,6 +18,8 @@ public class UserService {
                 .password(signupDTO.getPassword())
                 .name(signupDTO.getNickname())
                 .build();
+
+
         User savedUser = userRepository.save(user);
 
         return UserDTO.builder()
