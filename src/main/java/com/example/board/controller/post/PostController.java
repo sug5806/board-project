@@ -7,6 +7,7 @@ import com.example.board.entity.Post;
 import com.example.board.entity.PostCategory;
 import com.example.board.service.PostService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -19,10 +20,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.management.OperationsException;
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class PostController {
 
     private final PostService postService;
@@ -56,7 +57,7 @@ public class PostController {
                 .query(query)
                 .build();
 
-        Page<PostDTO.ConvertToPostDTO> postListPaging = postService.postListPaging(PostCategory.convertToCategory(boardType), searchDTO, pageable.of());
+        Page<PostDTO> postListPaging = postService.postListPaging(PostCategory.convertToCategory(boardType), searchDTO, pageable.of());
 
         model.addAttribute("post_list", postListPaging);
         model.addAttribute("type", boardType);
@@ -66,8 +67,8 @@ public class PostController {
     }
 
     @GetMapping("/post/{id}")
-    public String getPost(@PathVariable(name = "id") Long id, Model model) {
-        PostDTO postDTO = postService.getPost(id);
+    public String getPost(@PathVariable(name = "id") Long id, Model model, Principal principal) {
+        PostDTO postDTO = postService.getPost(id, principal);
         model.addAttribute("post", postDTO);
         model.addAttribute("type", postDTO.getCategory());
 
@@ -76,8 +77,8 @@ public class PostController {
 
     @GetMapping("/post/{id}/edit")
     @PreAuthorize("isAuthenticated()")
-    public String editPost(@PathVariable(name = "id") Long id, Model model) {
-        PostDTO postDTO = postService.getPost(id);
+    public String editPost(@PathVariable(name = "id") Long id, Model model, Principal principal) {
+        PostDTO postDTO = postService.getPost(id, principal);
         model.addAttribute("form", postDTO);
 
         return "post/edit";
@@ -86,44 +87,27 @@ public class PostController {
     @PostMapping("/post/{id}")
     @PreAuthorize("isAuthenticated()")
     public String updatePost(@PathVariable(name = "id") Long id, @Valid PostDTO postDTO) {
-        Post post = postService.updatePost(id, postDTO);
+        postService.updatePost(id, postDTO);
 
-        return "redirect:/post/" + post.getId();
+        return "redirect:/post/" + id.toString();
     }
 
     @PostMapping("/post/{id}/delete")
     @PreAuthorize("isAuthenticated()")
     public String deletePost(@PathVariable(name = "id") Long id) {
-        String postCategory = "";
         try {
-            postCategory = postService.deletePost(id);
+            postService.deletePost(id);
         } catch (OperationsException e) {
             return "main";
         }
 
-        return "redirect:/board/" + postCategory;
+        return "redirect:/post/" + id.toString();
     }
 
     @PostMapping("/post/{id}/like")
     @PreAuthorize("isAuthenticated()")
-    public String postLike(@PathVariable(name = "id") Long id,
-                           Principal principal,
-                           Model model) {
-
-        Map<String, Boolean> map = postService.postLike(id, principal);
-
-        model.addAttribute("is_voted", map.get("is_voted"));
-
-        return "post/post :: #article-vote";
-    }
-
-    @PostMapping("/post/{id}/dislike")
-    @PreAuthorize("isAuthenticated()")
-    public String postDisLike(@PathVariable(name = "id") Long id,
-                              Model model,
-                              Principal principal) {
-        postService.postDisLike(id, principal);
-
-        return "post/post :: #vote-arrow";
+    public String postLike(@PathVariable(name = "id") Long postId, Principal principal) {
+        postService.postLike(postId, principal);
+        return "redirect:/post/" + postId.toString();
     }
 }

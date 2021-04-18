@@ -3,6 +3,7 @@ package com.example.board.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Optional;
 
 import static javax.persistence.FetchType.LAZY;
 
@@ -33,6 +34,10 @@ public class PostLike {
     public void mappingPost(Post post) {
         this.post = post;
         post.mappingPostLike(this);
+    }
+
+    public static boolean isVotedPost(Optional<PostLike> optionalPostLike) {
+        return optionalPostLike.isPresent();
     }
 
 }

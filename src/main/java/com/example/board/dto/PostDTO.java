@@ -1,19 +1,32 @@
 package com.example.board.dto;
 
+import com.example.board.entity.Comment;
 import com.example.board.entity.Post;
 import com.example.board.entity.PostCategory;
+import com.example.board.entity.PostLike;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 @Data
 @Builder
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostDTO {
+    public static final int SEC = 60;
+
+    public static final int MIN = 60;
+
+    public static final int HOUR = 24;
+
+    public static final int DAY = 30;
+
+    public static final int MONTH = 12;
 
     private Long id;
 
@@ -36,62 +49,67 @@ public class PostDTO {
 
     private String createdAt;
 
-    @Getter
-    public static class ConvertToPostDTO {
-        public static final int SEC = 60;
+    private boolean isVoted;
 
-        public static final int MIN = 60;
+    private static String formatTimeString(LocalDateTime time) {
+        String msg;
+        LocalDateTime currentTime = LocalDateTime.now();
 
-        public static final int HOUR = 24;
+        long seconds = Duration.between(time, currentTime).getSeconds();
 
-        public static final int DAY = 30;
-
-        public static final int MONTH = 12;
-
-        private Long id;
-
-        private String title;
-
-        private Long likeCount;
-
-        private PostCategory category;
-
-        private UserDTO userDTO;
-
-        private String createdAt;
-
-        public ConvertToPostDTO(Post post) {
-            this.id = post.getId();
-            this.title = post.getTitle();
-            this.category = post.getCategory();
-            this.likeCount = post.getLikeCount();
-            this.createdAt = formatTimeString(post.getCreatedAt());
-            this.userDTO = UserDTO.builder()
-                    .nickname(post.getUser().getName())
-                    .build();
+        if (seconds < SEC) {
+            msg = seconds + "초 전";
+        } else if (seconds / SEC < MIN) {
+            msg = seconds / SEC + "분 전";
+        } else if (seconds / (SEC * MIN) < HOUR) {
+            msg = seconds / (SEC * MIN) + "시간 전";
+        } else if (seconds / (SEC * MIN * HOUR) < DAY) {
+            msg = seconds / (SEC * MIN * HOUR) + "일 전";
+        } else if (seconds / (SEC * MIN * HOUR * MONTH) < MONTH) {
+            msg = seconds / (SEC * MIN * HOUR * MONTH) + "개월 전";
+        } else {
+            msg = seconds / (SEC * MIN * HOUR * MONTH) + "년 전";
         }
 
-        private String formatTimeString(LocalDateTime time) {
-            String msg = "";
-            LocalDateTime currentTime = LocalDateTime.now();
+        return msg;
+    }
 
-            long seconds = Duration.between(time, currentTime).getSeconds();
+    public static PostDTO convertToPostDTO(Post post) {
+        return PostDTO.builder()
+                .id(post.getId())
+                .title(post.getTitle())
+                .contents(post.getContents())
+                .createdAt(formatTimeString(post.getCreatedAt()))
+                .likeCount(post.getLikeCount())
+                .viewCount(post.getViewCount())
+                .category(post.getCategory())
+                .userDTO(UserDTO.builder()
+                        .email(post.getUser().getEmail())
+                        .nickname(post.getUser().getName())
+                        .build())
+                .build();
+    }
 
-            if (seconds < SEC) {
-                msg = seconds + "초 전";
-            } else if (seconds / SEC < MIN) {
-                msg = seconds / SEC + "분 전";
-            } else if (seconds / (SEC * MIN) < HOUR) {
-                msg = seconds / (SEC * MIN) + "시간 전";
-            } else if (seconds / (SEC * MIN * HOUR) < DAY) {
-                msg = seconds / (SEC * MIN * HOUR) + "일 전";
-            } else if (seconds / (SEC * MIN * HOUR * MONTH) < MONTH) {
-                msg = seconds / (SEC * MIN * HOUR * MONTH) + "개월 전";
-            } else {
-                msg = seconds / (SEC * MIN * HOUR * MONTH) + "년 전";
-            }
+    public static PostDTO convertToPostDTO(Post post, Optional<PostLike> optionalPostLike) {
+        Stream<Comment> stream = post.getComments().stream();
 
-            return msg;
-        }
+        List<CommentDTO> collect = CommentDTO.convertToCommentDto(stream);
+
+        return PostDTO.builder()
+                .id(post.getId())
+                .title(post.getTitle())
+                .contents(post.getContents())
+                .createdAt(formatTimeString(post.getCreatedAt()))
+                .likeCount(post.getLikeCount())
+                .viewCount(post.getViewCount())
+                .category(post.getCategory())
+                .userDTO(UserDTO.builder()
+                        .email(post.getUser().getEmail())
+                        .nickname(post.getUser().getName())
+                        .build())
+                .comments(collect)
+                .commentCount(collect.size())
+                .isVoted(PostLike.isVotedPost(optionalPostLike))
+                .build();
     }
 }

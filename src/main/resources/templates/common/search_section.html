@@ -5,8 +5,10 @@
 <body>
 <div class="container border bg-white" th:fragment="search_section">
     <div class="row px-3 py-4 d-flex justify-content-between align-middle">
-        <h2 class="board-header-title">게시판</h2>
-        <!--                <a class="btn btn-info" th:href="@{${base_url + '/board/post'}}">글쓰기-->
+        <h2 class="board-header-title"
+            th:text="${T(com.example.board.entity.PostCategory).convertToCategory(board_type).getTitle()}"
+            th:with="board_type = ${type}">
+        </h2>
         <a class="btn btn-info" th:href="@{/board/post}">글쓰기</a>
     </div>
     <div class="row">
@@ -28,11 +30,6 @@
                 </label>
                 <input class="sub-header-search__input" id="search-input" name="query" placeholder="검색"
                        type="text">
-                <a class="sub-header-search__button" href="#">
-                    <img alt="검색"
-                         src="https://economy-bucket.s3.ap-northeast-2.amazonaws.com/search.png"
-                         width="24">
-                </a>
             </form>
         </div>
 

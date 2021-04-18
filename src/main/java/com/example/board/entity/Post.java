@@ -74,4 +74,9 @@ public class Post extends BaseEntity {
     public void updateLikeCount() {
         this.likeCount = (long) postLikes.size();
     }
+
+    public void discountLike(PostLike postLike) {
+        postLikes.remove(postLike);
+        this.updateLikeCount();
+    }
 }

@@ -72,22 +72,16 @@
                     </div>
 
                 </div>
-
-                <!--                <div class="article-box">-->
-                <!--                    <div class="article-vote" id="article-vote">-->
-                <!--                        <button class="article-vote__button button article-vote__up-arrow&#45;&#45;on"-->
-                <!--                                onclick="clickBoardDisLike()" th:if="${post.is_voted  == true}" type="submit">-->
-                <!--                            <span class="article-vote__up-arrow"></span>-->
-                <!--                            <span class="article-vote__up-count" th:text="${post.getLikeCount()}"></span>-->
-                <!--                        </button>-->
-
-                <!--                        <button class="article-vote__button button" onclick="clickBoardLike()"-->
-                <!--                                th:unless="${post.is_voted  == true}" type="submit">-->
-                <!--                            <span class="article-vote__up-arrow"></span>-->
-                <!--                            <span class="article-vote__up-count" th:text="${post.getLikeCount()}"></span>-->
-                <!--                        </button>-->
-                <!--                    </div>-->
-                <!--                </div>-->
+                <div class="article-box">
+                    <div class="article-vote" id="article-vote">
+                        <button class="article-vote__button button"
+                                th:onclick="clickBoardLike([[${post.getId()}]])" type="submit">
+                            <span class="article-vote__up-arrow--on" th:if="${post.isVoted()}"></span>
+                            <span class="article-vote__up-arrow" th:unless="${post.isVoted()}"></span>
+                            <span class="article-vote__up-count" th:text="${post.getLikeCount()}"></span>
+                        </button>
+                    </div>
+                </div>
 
                 <div th:replace="common/comment :: comment"></div>
 
@@ -111,22 +105,14 @@
         }
     }
 
-    function clickBoardDisLike() {
-        const id = [[${post.getId()}]]
+    function clickBoardLike(postId) {
+        let url = "/post/" + postId + "/like"
+        let html = "";
 
-        const url = "/post/" + id + "/dislike"
+        html += '<form name="postLike" action="' + url + '" method="post"></form>';
 
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: null,
-            success: function (data) {
-                alert("성공" + data);
-            },
-            error: function (error) {
-                alert(error);
-            }
-        })
+        $("body").append(html);
+        document.postLike.submit();
 
     }
 
