@@ -1,6 +1,6 @@
 package com.example.board.service;
 
-import com.example.board.config.custom_exception.PostNotFoundException;
+import com.example.board.common.custom_exception.PostNotFoundException;
 import com.example.board.dto.PostDTO;
 import com.example.board.dto.SearchDTO;
 import com.example.board.entity.Post;
@@ -56,7 +56,7 @@ public class PostService {
     @Transactional
     public PostDTO getPost(Long id, Principal principal) {
         Optional<Post> optionalPost = postRepository.findById(id);
-        Post foundPost = optionalPost.orElseThrow(() -> new PostNotFoundException(id));
+        Post foundPost = optionalPost.orElseThrow(PostNotFoundException::new);
 
         Optional<PostLike> optionalPostLike = Optional.empty();
 

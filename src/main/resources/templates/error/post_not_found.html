@@ -16,9 +16,11 @@
         </div>
 
         <div class="col" th:fragment="board">
+            <div th:replace="common/search_section.html :: search_section"></div>
+
             <div class="border bg-white article-not-found">
                 <img alt src="https://economy-bucket.s3.ap-northeast-2.amazonaws.com/not-found.png" width="80">
-                <div class="article-delete__message">잘못된 페이지 요청입니다.</div>
+                <div class="article-delete__message">게시물이 삭제되었거나 찾을 수 없습니다.</div>
             </div>
         </div>
     </div>

@@ -1,4 +1,4 @@
-package com.example.board.util;
+package com.example.board.common.query_dsl;
 
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;

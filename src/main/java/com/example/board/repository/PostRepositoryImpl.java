@@ -1,11 +1,11 @@
 package com.example.board.repository;
 
-import com.example.board.config.custom_exception.PostNotFoundException;
+import com.example.board.common.custom_exception.PostNotFoundException;
+import com.example.board.common.query_dsl.QueryDslUtil;
 import com.example.board.dto.SearchDTO;
 import com.example.board.entity.Post;
 import com.example.board.entity.PostCategory;
 import com.example.board.entity.SearchType;
-import com.example.board.util.QueryDslUtil;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -65,9 +65,8 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 break;
         }
 
-        System.out.println("eeeeeeeeeeeee : " + postListPaging.postList.isEmpty());
         if (postListPaging.postList.isEmpty()) {
-            throw new PostNotFoundException(1L);
+            throw new PostNotFoundException();
         }
 
         return new PageImpl<>(postListPaging.postList, pageable, postListPaging.postTotalCount);

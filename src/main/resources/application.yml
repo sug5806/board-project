@@ -33,6 +33,11 @@ spring:
   loggin.level:
     org.hibernate.SQL: debug
 
+server:
+  error:
+    whitelabel:
+      enabled: false
+
 cloud:
   aws:
     s3:
