@@ -2,7 +2,6 @@ package com.example.board.controller.login;
 
 import com.example.board.dto.LoginDTO;
 import com.example.board.dto.SignupDTO;
-import com.example.board.dto.UserDTO;
 import com.example.board.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -40,7 +39,7 @@ public class LoginController {
             return "signup";
         }
 
-        UserDTO signup = userService.signup(signupDTO);
+        userService.signup(signupDTO);
 
         return "redirect:/";
     }

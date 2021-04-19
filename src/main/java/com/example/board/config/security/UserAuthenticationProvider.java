@@ -7,6 +7,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -34,6 +35,6 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
     }
 
     private boolean checkPassword(String loginPassword, String dbPassword) {
-        return loginPassword.equals(dbPassword);
+        return BCrypt.checkpw(loginPassword, dbPassword);
     }
 }

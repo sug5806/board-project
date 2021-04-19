@@ -60,5 +60,9 @@ public class User extends DateTimeEntity {
     public void mappingPostLike(PostLike postLike) {
         this.postLikes.add(postLike);
     }
+
+    public void passwordEncryption(String password) {
+        this.password = BCrypt.hashpw(password, BCrypt.gensalt());
+    }
 }
 
