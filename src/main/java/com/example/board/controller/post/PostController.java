@@ -12,10 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 import javax.management.OperationsException;
 import javax.validation.Valid;
@@ -39,8 +37,15 @@ public class PostController {
 
     @PostMapping("/post")
     @PreAuthorize("isAuthenticated()")
-    public String createPost(@Valid PostDTO postDTO, Principal principal) {
+    public String createPost(@Valid @ModelAttribute("form") PostDTO postDTO, BindingResult result, Model model, Principal principal) {
+        if (result.hasErrors()) {
+            model.addAttribute("is_create", true);
+            return "post/create";
+        }
+
         Post post = postService.createPost(postDTO, principal);
+        model.addAttribute("is_create", true);
+
         return "redirect:/board/" + post.getCategory().toString().toLowerCase();
     }
 
@@ -61,8 +66,6 @@ public class PostController {
 
         model.addAttribute("post_list", postListPaging);
         model.addAttribute("type", boardType);
-        model.addAttribute("target", searchDTO.getType());
-        model.addAttribute("query", searchDTO.getQuery());
         return "post/post_list";
     }
 
@@ -86,7 +89,11 @@ public class PostController {
 
     @PostMapping("/post/{id}")
     @PreAuthorize("isAuthenticated()")
-    public String updatePost(@PathVariable(name = "id") Long id, @Valid PostDTO postDTO) {
+    public String updatePost(@PathVariable(name = "id") Long id, @Valid @ModelAttribute("form") PostDTO postDTO, BindingResult result) {
+        if (result.hasErrors()) {
+            return "post/edit";
+        }
+
         postService.updatePost(id, postDTO);
 
         return "redirect:/post/" + id.toString();

@@ -29,10 +29,14 @@
     <input autocomplete="off" class="form-control" id="title" placeholder="제목을 입력하세요"
            th:field="*{title}"
            type="text"/>
+    <!--    <p class="error_message" th:text="${title_error}" th:if="${title_error} != null"></p>-->
+    <p class="error_message" th:errors="*{title}" th:if="${#fields.hasErrors('title')}"></p>
 
     <label for="content"></label>
     <textarea autocomplete="off" class="form-control" id="content" placeholder="Content" rows="4"
               th:field="*{contents}" type="text"></textarea>
+    <!--    <p class="error_message" th:text="${contents_error}" th:if="${contents_error} != null"></p>-->
+    <p class="error_message" th:errors="*{contents}" th:if="${#fields.hasErrors('contents')}"></p>
 </div>
 </body>
 </html>

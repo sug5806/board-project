@@ -8,6 +8,5 @@ import lombok.*;
 @Getter
 public class SearchDTO {
     private String type;
-
     private String query;
 }

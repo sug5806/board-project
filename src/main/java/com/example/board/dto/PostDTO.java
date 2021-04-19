@@ -19,21 +19,17 @@ import java.util.stream.Stream;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostDTO {
     public static final int SEC = 60;
-
     public static final int MIN = 60;
-
     public static final int HOUR = 24;
-
     public static final int DAY = 30;
-
     public static final int MONTH = 12;
 
     private Long id;
 
-    @NotBlank
+    @NotBlank(message = "제목을 입력해주세요")
     private String title;
 
-    @NotBlank
+    @NotBlank(message = "내용을 입력해주세요")
     private String contents;
 
     private PostCategory category;
