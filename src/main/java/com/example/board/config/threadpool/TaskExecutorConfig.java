@@ -12,9 +12,11 @@ public class TaskExecutorConfig {
     @Bean(name = "executor")
     public ThreadPoolTaskExecutor executor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setMaxPoolSize(5);
+
+        executor.setCorePoolSize(3);
+        executor.setMaxPoolSize(3);
+
         executor.setThreadNamePrefix("my-thread");
-        executor.initialize();
         return executor;
     }
 

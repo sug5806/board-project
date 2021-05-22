@@ -2,9 +2,8 @@ package com.example.board.entity.economy_video;
 
 import lombok.Getter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -15,4 +14,7 @@ public class ScheduleChannel {
     private Long id;
     private String channelName;
     private String channelUrl;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "scheduleChannel")
+    private List<EconomyVideo> economyVideoList;
 }
