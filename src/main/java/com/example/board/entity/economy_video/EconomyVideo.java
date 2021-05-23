@@ -3,6 +3,7 @@ package com.example.board.entity.economy_video;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
@@ -17,6 +18,7 @@ public class EconomyVideo {
     private String title;
     private String url;
     private String thumbnailUrl;
+    private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "schedule_channel_id", foreignKey = @ForeignKey(name = "FK_EconomyVideo_ScheduleChannel"))

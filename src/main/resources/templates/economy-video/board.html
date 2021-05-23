@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="col" th:fragment="board">
+    <div th:replace="economy-video/search_section.html :: video_search_section"></div>
+
+    <section class="article-list article-list--compact">
+
+        <div class="row row-cols-1 row-cols-md-3">
+            <div class="col mb-4" th:each="video : ${post_list}">
+
+                <div class="card">
+                    <a th:href="${video.getUrl()}">
+                        <img alt="..." class="card-img-top" th:src="${video.getThumbUrl()}">
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${video.getTitle()}"></h5>
+                        <a th:href="@{${'/board/economy-video'}(type='user', query=${video.getChannel.getName()})}">
+                            <p class="card-text" th:text="${video.getChannel.getName()}"></p>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+    </section>
+
+    <div th:if="${post_list.totalElements} > 1">
+        <div th:replace="common/pagination :: paging"></div>
+    </div>
+
+    <div th:unless="${post_list.totalElements} < 1">
+
+    </div>
+</div>
+</body>
+</html>
+

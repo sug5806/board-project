@@ -12,16 +12,25 @@
                 query=${#httpServletRequest.getParameter('query')}">
 
             <li class="page-item" th:classappend="${post_list.first} ? 'disabled' : ''">
+                <!--                <a class="page-link"-->
+                <!--                   th:href="@{${'/board/'+type}(page=1,size=${post_list.size})}">처음</a>-->
                 <a class="page-link"
-                   th:href="@{${'/board/'+type}(page=1,size=${post_list.size})}">처음</a>
+                   th:href="@{${urlBuilder.replaceQueryParam('page', 1).replaceQueryParam('query', query).toUriString()}}"
+
+                >처음</a>
             </li>
             <!--     th:href="@{${'/board/'+type}(page=${start}-10,size=${post_list.size})}">-->
             <!--            th:with="currentUrl=(${#httpServletRequest.requestURI + '?' + #strings.defaultString(#httpServletRequest.queryString, '')})"-->
             <!--            th:href="@{${currentUrl}}">-->
             <li class="page-item" th:classappend="${start}-10 < 1 ? 'disabled' :''">
-                <a aria-label="Previous" class="page-link"
-                   th:href="@{${'/board/'+type}(page=${start}-10,size=${post_list.size})}">
+                <!--                <a aria-label="Previous" class="page-link"-->
+                <!--                   th:href="@{${'/board/'+type}(page=${start}-10,size=${post_list.size})}">-->
 
+                <!--                    <span aria-hidden="true">&larr;</span>-->
+                <!--                </a>-->
+                <a aria-label="Previous" class="page-link"
+                   th:href="@{${urlBuilder.replaceQueryParam('page', #numbers.formatInteger(start - 10, 1)).replaceQueryParam('query', query).toUriString()}}"
+                >
                     <span aria-hidden="true">&larr;</span>
                 </a>
             </li>

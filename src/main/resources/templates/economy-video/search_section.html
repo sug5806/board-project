@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/css/header :: header">
+</head>
+<body>
+<div class="container border bg-white" th:fragment="video_search_section">
+    <div class="row">
+        <div class="sub-header-search my-auto">
+            <form th:action="@{${'/board/economy-video'}}" th:method="get">
+                <label>
+                    <select class="sub-header-search__select" name="type">
+                        <option value="title">제목</option>
+                        <option value="user">크리에이터</option>
+                    </select>
+                </label>
+                <input class="sub-header-search__input" id="search-input" name="query" placeholder="검색"
+                       type="text">
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -11,29 +11,21 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-import javax.annotation.PostConstruct;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.board.entity.QPost.post;
 import static com.example.board.entity.QUser.user;
 
+@RequiredArgsConstructor
 public class PostRepositoryImpl implements PostRepositoryCustom {
-    @PersistenceContext
-    private EntityManager entityManager;
-    private JPAQueryFactory queryFactory;
-
-    @PostConstruct
-    private void init() {
-        this.queryFactory = new JPAQueryFactory(entityManager);
-    }
+    private final JPAQueryFactory queryFactory;
 
     @Override
     public Page<Post> postList(PostCategory postCategory, SearchDTO searchDTO, Pageable pageable) {

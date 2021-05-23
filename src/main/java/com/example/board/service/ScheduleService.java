@@ -4,6 +4,7 @@ import com.example.board.entity.economy_video.EconomyVideo;
 import com.example.board.entity.economy_video.ScheduleChannel;
 import com.example.board.repository.economy_video.EconomyVideoRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ScheduleService {
 
     private static WebDriver webDriver;
@@ -51,7 +53,6 @@ public class ScheduleService {
     }
 
     private void calculate(ScheduleChannel scheduleChannel) {
-        System.out.println(scheduleChannel.getChannelName() + "   " + scheduleChannel.getChannelUrl());
         webDriver.get(scheduleChannel.getChannelUrl());
 
         try {
@@ -76,18 +77,22 @@ public class ScheduleService {
 
         List<WebElement> elements = webDriver.findElements(By.cssSelector("#contents #items .ytd-grid-renderer #dismissible"));
 
+        log.info(String.format("%s 채널 업데이트 중 ===============================", scheduleChannel.getChannelName()));
         if (scheduleChannel.getEconomyVideoList().size() < 1) {
+            log.warn("데이터가 비어있어서 전부 추가");
             saveAllVideo(elements, scheduleChannel);
         } else {
             if (!getTitleElement(elements.get(0)).getText().equals(scheduleChannel.getEconomyVideoList().get(0).getTitle())) {
                 int count = elements.size() - scheduleChannel.getEconomyVideoList().size();
+                log.error("새로운 데이터가 있어 그 데이터만 추가");
                 for (int index = 0; index < count; index++) {
                     saveVideo(elements.get(index), scheduleChannel);
                 }
             }
+
+            log.info("업데이트 할 데이터 없음");
         }
-
-
+        log.info(String.format("%s 채널 업데이트 끝 ===============================", scheduleChannel.getChannelName()));
     }
 
     private void saveVideo(WebElement element, ScheduleChannel scheduleChannel) {

@@ -8,8 +8,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public enum SearchType {
     TITLE("title", "포스트 제목으로 검색"),
-    USER("user", "유저명으로 검색"),
-    OTHER("other", "외");
+    USER("user", "유저명으로 검색");
 
     @Getter
     private final String type;
@@ -21,6 +20,6 @@ public enum SearchType {
         return Arrays.stream(values())
                 .filter(searchType -> searchType.type.equals(type))
                 .findAny()
-                .orElse(OTHER);
+                .orElse(TITLE);
     }
 }
