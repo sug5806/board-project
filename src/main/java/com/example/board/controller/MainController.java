@@ -8,7 +8,7 @@ public class MainController {
 
     @GetMapping("/")
     public String Main() {
-        return "redirect:/board/free";
+        return "redirect:/board/economy-video";
     }
 
 }

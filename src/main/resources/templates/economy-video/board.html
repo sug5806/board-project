@@ -10,7 +10,7 @@
             <div class="col mb-4" th:each="video : ${post_list}">
 
                 <div class="card">
-                    <a th:href="${video.getUrl()}">
+                    <a target="_blank" th:href="${video.getUrl()}">
                         <img alt="..." class="card-img-top" th:src="${video.getThumbUrl()}">
                     </a>
                     <div class="card-body">

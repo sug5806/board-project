@@ -18,6 +18,13 @@
             </form>
         </div>
     </div>
+
+    <div class="row">
+        <a th:each="channel : ${channel_list}"
+           th:href="@{${'/board/economy-video'}(type='user', query=${channel.getName()})}">
+            <button class="btn btn-secondary btn-rounded" th:text="${channel.getName()}" type="button"></button>
+        </a>
+    </div>
 </div>
 </body>
 </html>

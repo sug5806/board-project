@@ -14,6 +14,5 @@ public class ChannelDTO {
         return ChannelDTO.builder()
                 .name(channel.getChannelName())
                 .build();
-
     }
 }
