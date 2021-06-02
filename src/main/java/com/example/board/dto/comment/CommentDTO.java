@@ -1,5 +1,6 @@
-package com.example.board.dto;
+package com.example.board.dto.comment;
 
+import com.example.board.dto.user.UserDTO;
 import com.example.board.entity.Comment;
 import lombok.*;
 

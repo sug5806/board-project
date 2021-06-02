@@ -5,12 +5,12 @@
 <div class="col-4" th:fragment="sidebar">
     <div class="border bg-white sidebar-area">
         <div class="sidebar-content-header" th:if="${#authorization.expr('isAuthenticated()')}">
-            <div class="pb-3 sidebar-button__item">
-                <span th:text="${'안녕하세요 '+#authentication.getPrincipal().getNickname()+' 님'}"></span>
-            </div>
+            <!--            <div class="pb-3 sidebar-button__item">-->
+            <!--                <span th:text="${'안녕하세요 '+#authentication.getPrincipal().getNickname()+' 님'}"></span>-->
+            <!--            </div>-->
             <div class="sidebar-button">
                 <div class="sidebar-button__item">
-                    <a class="button button--green" th:href="@{~/logout}">로그아웃</a>
+                    <a class="button button--red" th:href="@{~/logout}">로그아웃</a>
                 </div>
             </div>
         </div>

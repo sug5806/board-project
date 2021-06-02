@@ -1,15 +1,15 @@
-package com.example.board.dto;
+package com.example.board.dto.user.login;
 
 import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
-@Data
 @Builder
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class SignupDTO {
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+public class LoginDTO {
 
     @Email
     @NotBlank(message = "이메일을 입력해주세요")
@@ -17,7 +17,4 @@ public class SignupDTO {
 
     @NotBlank(message = "비밀번호를 입력해주세요")
     private String password;
-
-    @NotBlank(message = "닉네임을 입력해주세요")
-    private String nickname;
 }

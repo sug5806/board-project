@@ -1,9 +1,9 @@
-package com.example.board.service;
+package com.example.board.service.file;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.example.board.dto.FileUploadDTO;
+import com.example.board.dto.file.FileUploadDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;

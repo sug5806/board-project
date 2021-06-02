@@ -1,7 +1,7 @@
 package com.example.board.controller.comment;
 
-import com.example.board.dto.CommentDTO;
-import com.example.board.service.CommentService;
+import com.example.board.dto.comment.CommentDTO;
+import com.example.board.service.comment.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;

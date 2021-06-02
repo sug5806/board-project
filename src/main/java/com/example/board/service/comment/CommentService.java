@@ -1,6 +1,6 @@
-package com.example.board.service;
+package com.example.board.service.comment;
 
-import com.example.board.dto.CommentDTO;
+import com.example.board.dto.comment.CommentDTO;
 import com.example.board.entity.Comment;
 import com.example.board.entity.Post;
 import com.example.board.entity.User;

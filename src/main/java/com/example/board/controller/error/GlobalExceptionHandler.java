@@ -3,7 +3,7 @@ package com.example.board.controller.error;
 import com.example.board.common.custom_exception.PostNotFoundException;
 import com.example.board.common.custom_exception.UserEmailExistException;
 import com.example.board.common.custom_exception.UserNicknameExistException;
-import com.example.board.dto.SignupDTO;
+import com.example.board.dto.user.signup.SignupDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;

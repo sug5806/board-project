@@ -1,11 +1,11 @@
 package com.example.board.controller.economy_video;
 
 import com.example.board.common.PageRequest;
-import com.example.board.dto.SearchDTO;
-import com.example.board.dto.video.ChannelDTO;
-import com.example.board.dto.video.VideoDTO;
-import com.example.board.service.ChannelService;
-import com.example.board.service.EconomyVideoService;
+import com.example.board.dto.file.video.ChannelDTO;
+import com.example.board.dto.file.video.VideoDTO;
+import com.example.board.dto.post.search.SearchDTO;
+import com.example.board.service.video.ChannelService;
+import com.example.board.service.video.EconomyVideoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+
 
 @Controller
 @RequiredArgsConstructor

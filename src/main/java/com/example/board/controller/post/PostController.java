@@ -1,11 +1,11 @@
 package com.example.board.controller.post;
 
 import com.example.board.common.PageRequest;
-import com.example.board.dto.PostDTO;
-import com.example.board.dto.SearchDTO;
+import com.example.board.dto.post.PostDTO;
+import com.example.board.dto.post.search.SearchDTO;
 import com.example.board.entity.Post;
 import com.example.board.entity.PostCategory;
-import com.example.board.service.PostService;
+import com.example.board.service.post.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

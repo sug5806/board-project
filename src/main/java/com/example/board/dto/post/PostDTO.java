@@ -1,5 +1,7 @@
-package com.example.board.dto;
+package com.example.board.dto.post;
 
+import com.example.board.dto.comment.CommentDTO;
+import com.example.board.dto.user.UserDTO;
 import com.example.board.entity.Comment;
 import com.example.board.entity.Post;
 import com.example.board.entity.PostCategory;

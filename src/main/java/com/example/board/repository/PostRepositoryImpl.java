@@ -2,7 +2,7 @@ package com.example.board.repository;
 
 import com.example.board.common.custom_exception.PostNotFoundException;
 import com.example.board.common.query_dsl.QueryDslUtil;
-import com.example.board.dto.SearchDTO;
+import com.example.board.dto.post.search.SearchDTO;
 import com.example.board.entity.Post;
 import com.example.board.entity.PostCategory;
 import com.example.board.entity.SearchType;

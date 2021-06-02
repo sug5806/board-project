@@ -1,7 +1,7 @@
-package com.example.board.service;
+package com.example.board.service.video;
 
-import com.example.board.dto.SearchDTO;
-import com.example.board.dto.video.VideoDTO;
+import com.example.board.dto.file.video.VideoDTO;
+import com.example.board.dto.post.search.SearchDTO;
 import com.example.board.repository.economy_video.EconomyVideoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

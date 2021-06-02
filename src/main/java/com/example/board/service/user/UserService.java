@@ -1,9 +1,9 @@
-package com.example.board.service;
+package com.example.board.service.user;
 
 import com.example.board.common.custom_exception.UserEmailExistException;
 import com.example.board.common.custom_exception.UserNicknameExistException;
-import com.example.board.dto.SignupDTO;
-import com.example.board.dto.UserDTO;
+import com.example.board.dto.user.UserDTO;
+import com.example.board.dto.user.signup.SignupDTO;
 import com.example.board.entity.User;
 import com.example.board.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

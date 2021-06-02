@@ -1,4 +1,4 @@
-package com.example.board.dto.video;
+package com.example.board.dto.file.video;
 
 import com.example.board.entity.economy_video.EconomyVideo;
 import lombok.*;

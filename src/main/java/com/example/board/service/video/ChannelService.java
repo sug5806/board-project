@@ -1,6 +1,6 @@
-package com.example.board.service;
+package com.example.board.service.video;
 
-import com.example.board.dto.video.ChannelDTO;
+import com.example.board.dto.file.video.ChannelDTO;
 import com.example.board.repository.economy_video.ScheduleChannelRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

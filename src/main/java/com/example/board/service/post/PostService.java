@@ -1,8 +1,8 @@
-package com.example.board.service;
+package com.example.board.service.post;
 
 import com.example.board.common.custom_exception.PostNotFoundException;
-import com.example.board.dto.PostDTO;
-import com.example.board.dto.SearchDTO;
+import com.example.board.dto.post.PostDTO;
+import com.example.board.dto.post.search.SearchDTO;
 import com.example.board.entity.Post;
 import com.example.board.entity.PostCategory;
 import com.example.board.entity.PostLike;

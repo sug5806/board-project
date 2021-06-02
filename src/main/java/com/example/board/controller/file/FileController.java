@@ -1,7 +1,7 @@
 package com.example.board.controller.file;
 
-import com.example.board.dto.FileUploadDTO;
-import com.example.board.service.FileService;
+import com.example.board.dto.file.FileUploadDTO;
+import com.example.board.service.file.FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestPart;

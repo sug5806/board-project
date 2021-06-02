@@ -21,6 +21,7 @@ public class User extends DateTimeEntity {
     @GeneratedValue
     private Long id;
 
+    @Column(nullable = false)
     private String email;
 
     @Column(length = 100)
@@ -28,9 +29,14 @@ public class User extends DateTimeEntity {
 
     private String password;
 
-    private String role;
+    @Column
+    private String picture;
 
-    private String principal;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
+
+//    private String principal;
 
     @OneToMany(fetch = LAZY, mappedBy = "user")
     private List<Post> postList = new ArrayList<>();
@@ -63,6 +69,17 @@ public class User extends DateTimeEntity {
 
     public void passwordEncryption(String password) {
         this.password = BCrypt.hashpw(password, BCrypt.gensalt());
+    }
+
+    public User update(String name, String picture) {
+        this.name = name;
+        this.picture = picture;
+
+        return this;
+    }
+
+    public String getRoleKey() {
+        return this.role.getKey();
     }
 }
 

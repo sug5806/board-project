@@ -1,6 +1,6 @@
 package com.example.board.repository;
 
-import com.example.board.dto.SearchDTO;
+import com.example.board.dto.post.search.SearchDTO;
 import com.example.board.entity.Post;
 import com.example.board.entity.PostCategory;
 import org.springframework.data.domain.Page;

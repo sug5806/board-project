@@ -1,6 +1,7 @@
 package com.example.board.config.security;
 
 import com.example.board.config.security.login.AuthFailureHandler;
+import com.example.board.service.user.CustomOauth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +22,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserAuthenticationProvider userAuthenticationProvider;
     private final AuthFailureHandler authFailureHandler;
+    private final CustomOauth2UserService customOauth2UserService;
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -39,6 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.addFilterBefore(filter, CsrfFilter.class);
 
         httpSecurity.authorizeRequests()
+
                 .antMatchers("/common/css/**").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/signup").permitAll()
@@ -62,7 +65,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .deleteCookies("JSESSIONID")
                 .permitAll()
                 .and()
-                .csrf().disable();
+                .csrf().disable()
+                .oauth2Login()
+                .loginPage("/login")
+                .loginProcessingUrl("/")
+                .userInfoEndpoint()
+                .userService(customOauth2UserService);
+
+
     }
 
     @Override
